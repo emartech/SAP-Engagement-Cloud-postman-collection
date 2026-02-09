@@ -1,5 +1,5 @@
-# SAP Engagement Cloud - Beta Developer Tooling
-**Please note that SAP Engagement Cloud is in the 'closed beta' phase, with general availability expected in the near future.** 
+# SAP Engagement Cloud - Developer Tooling
+**This repo was based on the beta collection, and is in progress of being updated** 
 
 **Written in the Postman format and tested with Bruno**
 

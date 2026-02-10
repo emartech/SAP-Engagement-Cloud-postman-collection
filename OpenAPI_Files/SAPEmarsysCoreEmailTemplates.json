@@ -1,1 +1,271 @@
-{"openapi":"3.0.3","info":{"description":"These are the endpoints related to email templates used in your campaigns. You can list all your templates as well as ask for a specific one to be able to examine the details and determine the required adjustments.","title":"SAP Emarsys Core - Email templates","version":"3.0.0"},"servers":[{"url":"https://{host}/api/v3","description":"Production server","variables":{"host":{"default":"api.emarsys.net","description":"This is the Emarsys API server."}}}],"externalDocs":{"description":"For more information, please visit our official SAP Emarsys developer portal.","url":"https://dev.emarsys.com/docs/core-api-reference/a84db1e6d2d8d-emarsys-core-api-email-templates-endpoint-batch"},"paths":{"/email/templates":{"get":{"tags":["Email templates"],"summary":"List email templates","description":"Returns a list of all templates, including their names and identifiers.\n\n**Note:** This endpoint is not compatible with VC (block-based) email templates.","operationId":"listEmailTemplates","responses":{"200":{"description":"Successful call.","content":{"application/json":{"schema":{"type":"object","description":"See the example or [Response Codes](https://dev.emarsys.com/docs/core-api-reference/cnyqzhdnbl7r2-http-200-errors) for details.","properties":{"replyCode":{"type":"object","description":"The Emarsys [response code](https://dev.emarsys.com/docs/core-api-reference/cnyqzhdnbl7r2-http-200-errors)."},"replyText":{"type":"object","description":"The summary of the [response](https://dev.emarsys.com/docs/core-api-reference/cnyqzhdnbl7r2-http-200-errors)."},"data":{"type":"array","description":"The requesteed data.","items":{"type":"object","properties":{"id":{"type":"integer","description":"The template identifier."},"name":{"type":"string","description":"The template name."}}}}}}}}}},"security":[{"oauth2ClientCredentials":[]}]}},"/email/templates/{templates}":{"parameters":[{"schema":{"type":"string"},"name":"templates","description":"The name of the required template.","in":"path","required":true}],"get":{"summary":"Get an email template","description":"Returns the data of an email template.\n\n**Note**: This endpoint is not compatible with VCE (block-based) e-mail templates.","tags":["Email templates"],"responses":{"200":{"description":"Successful request.","content":{"application/json":{"schema":{"type":"object","x-examples":{"Example 1":{"replyCode":0,"replyText":"string","data":{"id":0,"name":"string","groups":[{"id":0,"name":"string"}]}}},"properties":{"replyCode":{"type":"integer","description":"The Emarsys [response code](https://dev.emarsys.com/docs/core-api-reference/cnyqzhdnbl7r2-http-200-errors)."},"replyText":{"type":"string","description":"The summary of the response."},"data":{"type":"object","description":"The requested data.","properties":{"id":{"type":"integer","description":"The template identifier."},"name":{"type":"string","description":"The template name."},"groups":{"type":"array","items":{"type":"object","properties":{"id":{"type":"integer","description":"The identifier of the group containing sections."},"name":{"type":"string","description":"The name of the group containing sections."}}}}}}}},"examples":{"Example 1":{"value":{"replyCode":0,"replyText":"string","data":{"id":0,"name":"string","groups":[{"id":0,"name":"string"}]}}}}}}},"404":{"description":"Not found.","$ref":"#/components/responses/default404"}},"operationId":"get-email-templates-templates","parameters":[{"schema":{"type":"integer"},"in":"query","name":"templateId","description":"The ID of the template."}],"security":[{"oauth2ClientCredentials":[]}]}}},"x-sap-shortText":"These endpoints allow you to search and examine your email templates used in your campaigns in order to determine required modifications.","components":{"securitySchemes":{"oauth2ClientCredentials":{"type":"oauth2","flows":{"clientCredentials":{"tokenUrl":"https://{hostname}/oauth2/token","scopes":{}}},"description":"To use this API, you must first obtain an OAuth 2.0 client credentials token. After that you can use the token to call the API. For more information, see [Authentication](https://dev.emarsys.com/docs/emarsys-core-api-guides/branches/OAuth-2.0/b3c3a1eba8515-authentication-in-v3-api)."}},"responses":{"default404":{"description":"Not found.","content":{"application/json":{"schema":{"$ref":"#/components/schemas/default-error-response"}}}}},"schemas":{"default-error-response":{"type":"object","x-examples":{"Example 1":{"replyCode":0,"replyText":"OK","data":{}}},"properties":{"replyCode":{"type":"integer","description":"The Emarsys response code. Successful requests return 0; otherwise, see [errors](https://dev.emarsys.com/docs/core-api-reference/jir98la21pufy-http-400-errors)."},"replyText":{"type":"string","description":"Additional information on the status of the request."},"data":{"type":"object","description":"Contains the requested data, if applicable."}},"description":"This is the generic SAP Emarsys error message."}}},"security":[{"oauth2ClientCredentials":[]}],"tags":[{"name":"Email templates"}]}
+{
+    "openapi": "3.0.3",
+    "info": {
+        "description": "These are the endpoints related to email templates used in your campaigns. You can list all your templates as well as ask for a specific one to be able to examine the details and determine the required adjustments.",
+        "title": "SAP Emarsys Core - Email templates",
+        "version": "3.0.0"
+    },
+    "servers": [
+        {
+            "url": "https://{host}/api/v3",
+            "description": "Production server",
+            "variables": {
+                "host": {
+                    "default": "api.emarsys.net",
+                    "description": "This is the Emarsys API server."
+                }
+            }
+        }
+    ],
+    "externalDocs": {
+        "description": "For more information, please visit our official SAP Emarsys developer portal.",
+        "url": "https://dev.emarsys.com/docs/core-api-reference/a84db1e6d2d8d-emarsys-core-api-email-templates-endpoint-batch"
+    },
+    "paths": {
+        "/email/templates": {
+            "get": {
+                "tags": [
+                    "Email templates"
+                ],
+                "summary": "List email templates",
+                "description": "Returns a list of all templates, including their names and identifiers.\n\n**Note:** This endpoint is not compatible with VC (block-based) email templates.",
+                "operationId": "listEmailTemplates",
+                "responses": {
+                    "200": {
+                        "description": "Successful call.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "description": "See the example or [Response Codes](https://dev.emarsys.com/docs/core-api-reference/cnyqzhdnbl7r2-http-200-errors) for details.",
+                                    "properties": {
+                                        "replyCode": {
+                                            "type": "object",
+                                            "description": "The Emarsys [response code](https://dev.emarsys.com/docs/core-api-reference/cnyqzhdnbl7r2-http-200-errors)."
+                                        },
+                                        "replyText": {
+                                            "type": "object",
+                                            "description": "The summary of the [response](https://dev.emarsys.com/docs/core-api-reference/cnyqzhdnbl7r2-http-200-errors)."
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "description": "The requesteed data.",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "description": "The template identifier."
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "description": "The template name."
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "oauth2ClientCredentials": []
+                    }
+                ]
+            }
+        },
+        "/email/templates/{templates}": {
+            "parameters": [
+                {
+                    "schema": {
+                        "type": "string"
+                    },
+                    "name": "templates",
+                    "description": "The name of the required template.",
+                    "in": "path",
+                    "required": true
+                }
+            ],
+            "get": {
+                "summary": "Get an email template",
+                "description": "Returns the data of an email template.\n\n**Note**: This endpoint is not compatible with VCE (block-based) e-mail templates.",
+                "tags": [
+                    "Email templates"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful request.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "x-examples": {
+                                        "Example 1": {
+                                            "replyCode": 0,
+                                            "replyText": "string",
+                                            "data": {
+                                                "id": 0,
+                                                "name": "string",
+                                                "groups": [
+                                                    {
+                                                        "id": 0,
+                                                        "name": "string"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "properties": {
+                                        "replyCode": {
+                                            "type": "integer",
+                                            "description": "The Emarsys [response code](https://dev.emarsys.com/docs/core-api-reference/cnyqzhdnbl7r2-http-200-errors)."
+                                        },
+                                        "replyText": {
+                                            "type": "string",
+                                            "description": "The summary of the response."
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "description": "The requested data.",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "description": "The template identifier."
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "description": "The template name."
+                                                },
+                                                "groups": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer",
+                                                                "description": "The identifier of the group containing sections."
+                                                            },
+                                                            "name": {
+                                                                "type": "string",
+                                                                "description": "The name of the group containing sections."
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "examples": {
+                                    "Example 1": {
+                                        "value": {
+                                            "replyCode": 0,
+                                            "replyText": "string",
+                                            "data": {
+                                                "id": 0,
+                                                "name": "string",
+                                                "groups": [
+                                                    {
+                                                        "id": 0,
+                                                        "name": "string"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found.",
+                        "$ref": "#/components/responses/default404"
+                    }
+                },
+                "operationId": "get-email-templates-templates",
+                "parameters": [
+                    {
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "in": "query",
+                        "name": "templateId",
+                        "description": "The ID of the template."
+                    }
+                ],
+                "security": [
+                    {
+                        "oauth2ClientCredentials": []
+                    }
+                ]
+            }
+        }
+    },
+    "x-sap-shortText": "These endpoints allow you to search and examine your email templates used in your campaigns in order to determine required modifications.",
+    "components": {
+        "securitySchemes": {
+            "oauth2ClientCredentials": {
+                "type": "oauth2",
+                "flows": {
+                    "clientCredentials": {
+                        "tokenUrl": "https://{hostname}/oauth2/token",
+                        "scopes": {}
+                    }
+                },
+                "description": "To use this API, you must first obtain an OAuth 2.0 client credentials token. After that you can use the token to call the API. For more information, see [Authentication](https://dev.emarsys.com/docs/emarsys-core-api-guides/branches/OAuth-2.0/b3c3a1eba8515-authentication-in-v3-api)."
+            }
+        },
+        "responses": {
+            "default404": {
+                "description": "Not found.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/default-error-response"
+                        }
+                    }
+                }
+            }
+        },
+        "schemas": {
+            "default-error-response": {
+                "type": "object",
+                "x-examples": {
+                    "Example 1": {
+                        "replyCode": 0,
+                        "replyText": "OK",
+                        "data": {}
+                    }
+                },
+                "properties": {
+                    "replyCode": {
+                        "type": "integer",
+                        "description": "The Emarsys response code. Successful requests return 0; otherwise, see [errors](https://dev.emarsys.com/docs/core-api-reference/jir98la21pufy-http-400-errors)."
+                    },
+                    "replyText": {
+                        "type": "string",
+                        "description": "Additional information on the status of the request."
+                    },
+                    "data": {
+                        "type": "object",
+                        "description": "Contains the requested data, if applicable."
+                    }
+                },
+                "description": "This is the generic SAP Emarsys error message."
+            }
+        }
+    },
+    "security": [
+        {
+            "oauth2ClientCredentials": []
+        }
+    ],
+    "tags": [
+        {
+            "name": "Email templates"
+        }
+    ]
+}

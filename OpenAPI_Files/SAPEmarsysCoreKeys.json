@@ -1,1 +1,372 @@
-{"openapi":"3.0.1","servers":[{"url":"https://{host}/api/v3","description":"Production server","variables":{"host":{"default":"api.emarsys.net","description":"This is the Emarsys API server"}}}],"info":{"description":"Create and maintain a convenient safety keyring to store your different keys for the SFTP-based auto-imports.\nYou can create, retrieve or delete a key on the keyring. We use 4096-bit RSA keys for optimal security.","title":"SAP Emarsys Core - Keys","version":"3.0.0"},"tags":[{"name":"Keys"}],"externalDocs":{"description":"For more information, please visit our official SAP Emarsys developer portal.","url":"https://dev.emarsys.com/docs/core-api-reference/0e8fb535f748d-emarsys-core-api-keys-endpoint-batch"},"x-sap-shortText":"Use these endpoints to collect your keys to a keyring and use them for the SFTP-based auto-imports.","paths":{"/v3/settings/keyrings":{"post":{"summary":"Create a Key in the Keyring","tags":["Keys"],"description":"Creates and returns a new key in the keyring for SFTP key-based authentication.\n\n**Note:** This feature is in the pilot phase and currently available for a limited number of clients only. If you are interested in participating, contact Emarsys support.\n\n**Important:** Access to administrative endpoints is restricted. If you need access, contact Emarsys support.","operationId":"createKeyInKeyring","responses":{"200":{"description":"Successful call.","content":{"application/json":{"schema":{"type":"object","description":"See the example or [Response Codes](https://dev.emarsys.com/docs/core-api-reference/cnyqzhdnbl7r2-http-200-errors) for details.","properties":{"replyCode":{"type":"integer","description":"The SAP Emarsys [response code](https://dev.emarsys.com/docs/core-api-reference/cnyqzhdnbl7r2-http-200-errors)."},"replyText":{"type":"string","description":"The summary of the [response](https://dev.emarsys.com/docs/core-api-reference/cnyqzhdnbl7r2-http-200-errors)."},"data":{"type":"array","description":"The requested data.","items":{"type":"object","properties":{"id":{"type":"string","description":"The identifier of the key."},"comment":{"type":"string","description":"The name of the key."},"created":{"type":"string","description":"The creation date of the key."},"ssh_fingerprint":{"type":"string","description":"The SSH fingerprint of the key."},"ssh_public_key":{"type":"string","description":"The SSH key."}}}}}}}}},"400":{"$ref":"#/components/responses/default-response"}},"security":[{"oauth2ClientCredentials":[]}],"requestBody":{"content":{"application/json":{"schema":{"type":"object","required":["comment"],"properties":{"comment":{"type":"string","description":"The name of the key, appended as suffix.\n\n**Note**: Choose an easy to understand name for easier management."}}},"examples":{"Example 1":{"value":{"comment":"string"}}}}}}}},"/v3/settings/keyring/keys/{keyId}":{"post":{"summary":"Retrieve a Key from the Keyring","tags":["Keys"],"description":"Returns a key from the keyring for SFTP key-based authentication.\n\n**Note:** This feature is in the pilot phase and currently available for a limited number of clients only. If you are interested in participating, contact Emarsys support.\n\n**Important:** Access to administrative endpoints is restricted. If you need access, contact Emarsys support.","operationId":"retrieveKeyFromKeyring","parameters":[{"schema":{"type":"integer"},"name":"keyId","in":"path","description":"The identifier of the key.","required":true}],"responses":{"200":{"description":"Succcessful call.","content":{"application/json":{"schema":{"type":"object","description":"See the example or [Response Codes](https://dev.emarsys.com/docs/core-api-reference/cnyqzhdnbl7r2-http-200-errors) for details.","properties":{"replyCode":{"type":"integer","description":"The SAP Emarsys [response code](https://dev.emarsys.com/docs/core-api-reference/cnyqzhdnbl7r2-http-200-errors)."},"replyText":{"type":"string","description":"The summary of the [response](https://dev.emarsys.com/docs/core-api-reference/cnyqzhdnbl7r2-http-200-errors)."},"data":{"type":"array","description":"The requested data.","items":{"type":"object","properties":{"id":{"type":"string","description":"The identifier of the key."},"comment":{"type":"string","description":"The name of the key."},"created":{"type":"string","description":"The creation date of the key."},"ssh_fingerprint":{"type":"string","description":"The SSH fingerprint of the key."},"ssh_public_key":{"type":"string","description":"The SSH key."}}}}}}}}},"400":{"$ref":"#/components/responses/default-response"}},"security":[{"oauth2ClientCredentials":[]}]}},"/v3/keyring/keys":{"post":{"summary":"List Keys in the Keyring","tags":["Keys"],"description":"Lists all keys in the keyring for SFTP key-based authentication.\n\n**Note:** This feature is in the pilot phase and currently available for a limited number of clients only. If you are interested in participating, contact Emarsys support.\n\n**Important:** Access to administrative endpoints is restricted. If you need access, contact Emarsys support.","operationId":"listKeysInKeyring","responses":{"200":{"description":"Succcessful call.","content":{"application/json":{"schema":{"type":"object","description":"See the example or [Response Codes](https://dev.emarsys.com/docs/core-api-reference/cnyqzhdnbl7r2-http-200-errors) for details.","properties":{"replyCode":{"type":"integer","description":"The SAP Emarsys [response code](https://dev.emarsys.com/docs/core-api-reference/cnyqzhdnbl7r2-http-200-errors)."},"replyText":{"type":"string","description":"The summary of the [response](https://dev.emarsys.com/docs/core-api-reference/cnyqzhdnbl7r2-http-200-errors)."},"data":{"type":"array","description":"The requested data.","items":{"type":"object","properties":{"id":{"type":"string","description":"The identifier of the key."},"comment":{"type":"string","description":"The name of the key."},"created":{"type":"string","description":"The creation date of the key."}}}}}}}}},"400":{"$ref":"#/components/responses/default-response"}},"security":[{"oauth2ClientCredentials":[]}]}},"/v3/keyring/keys/{keyId}/delete":{"post":{"summary":"Delete a Key from the Keyring","tags":["Keys"],"description":"Deletes a single key from the keyring.\n\n**Note:** This feature is in the pilot phase and currently available for a limited number of clients only. If you are interested in participating, contact Emarsys support.\n\n**Important:** Access to administrative endpoints is restricted. If you need access, contact Emarsys support.","operationId":"deleteKeyFromKeyring","parameters":[{"schema":{"type":"integer"},"name":"keyId","in":"path","description":"The identifier of the key.","required":true}],"responses":{"200":{"$ref":"#/components/responses/default-response"},"400":{"$ref":"#/components/responses/default-response"}},"security":[{"oauth2ClientCredentials":[]}]}}},"security":[{"oauth2ClientCredentials":[]}],"components":{"schemas":{"default-response-example":{"title":"Default response","type":"object","description":"This is the generic SAP Emarsys response.","x-examples":{"Example 1":{"replyCode":0,"replyText":"string","data":{}}},"properties":{"replyCode":{"type":"integer","description":"The Emarsys response code. Successful requests return 0; otherwise, see [errors](https://dev.emarsys.com/docs/core-api-reference/jir98la21pufy-http-400-errors)."},"replyText":{"type":"string","description":"Additional informationon the status of the request."},"data":{"type":"object","description":"Contains the requested data, if applicable."}}}},"securitySchemes":{"oauth2ClientCredentials":{"type":"oauth2","flows":{"clientCredentials":{"tokenUrl":"https://{host}/oauth2/token","scopes":{}}},"description":"To use this API, you must first obtain an OAuth 2.0 client credentials token. After that you can use the token to call the API. For more information, see [Authentication](https://dev.emarsys.com/docs/emarsys-core-api-guides/branches/OAuth-2.0/b3c3a1eba8515-authentication-in-v3-api)."}},"responses":{"default-response":{"description":"Response example:","content":{"application/json":{"schema":{"$ref":"#/components/schemas/default-response-example"},"examples":{"Example 1":{"value":{"replyCode":0,"replyText":"string","data":{}}}}}}}}}}
+{
+    "openapi": "3.0.1",
+    "servers": [
+        {
+            "url": "https://{host}/api/v3",
+            "description": "Production server",
+            "variables": {
+                "host": {
+                    "default": "api.emarsys.net",
+                    "description": "This is the Emarsys API server"
+                }
+            }
+        }
+    ],
+    "info": {
+        "description": "Create and maintain a convenient safety keyring to store your different keys for the SFTP-based auto-imports.\nYou can create, retrieve or delete a key on the keyring. We use 4096-bit RSA keys for optimal security.",
+        "title": "SAP Emarsys Core - Keys",
+        "version": "3.0.0"
+    },
+    "tags": [
+        {
+            "name": "Keys"
+        }
+    ],
+    "externalDocs": {
+        "description": "For more information, please visit our official SAP Emarsys developer portal.",
+        "url": "https://dev.emarsys.com/docs/core-api-reference/0e8fb535f748d-emarsys-core-api-keys-endpoint-batch"
+    },
+    "x-sap-shortText": "Use these endpoints to collect your keys to a keyring and use them for the SFTP-based auto-imports.",
+    "paths": {
+        "/v3/settings/keyrings": {
+            "post": {
+                "summary": "Create a Key in the Keyring",
+                "tags": [
+                    "Keys"
+                ],
+                "description": "Creates and returns a new key in the keyring for SFTP key-based authentication.\n\n**Note:** This feature is in the pilot phase and currently available for a limited number of clients only. If you are interested in participating, contact Emarsys support.\n\n**Important:** Access to administrative endpoints is restricted. If you need access, contact Emarsys support.",
+                "operationId": "createKeyInKeyring",
+                "responses": {
+                    "200": {
+                        "description": "Successful call.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "description": "See the example or [Response Codes](https://dev.emarsys.com/docs/core-api-reference/cnyqzhdnbl7r2-http-200-errors) for details.",
+                                    "properties": {
+                                        "replyCode": {
+                                            "type": "integer",
+                                            "description": "The SAP Emarsys [response code](https://dev.emarsys.com/docs/core-api-reference/cnyqzhdnbl7r2-http-200-errors)."
+                                        },
+                                        "replyText": {
+                                            "type": "string",
+                                            "description": "The summary of the [response](https://dev.emarsys.com/docs/core-api-reference/cnyqzhdnbl7r2-http-200-errors)."
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "description": "The requested data.",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "string",
+                                                        "description": "The identifier of the key."
+                                                    },
+                                                    "comment": {
+                                                        "type": "string",
+                                                        "description": "The name of the key."
+                                                    },
+                                                    "created": {
+                                                        "type": "string",
+                                                        "description": "The creation date of the key."
+                                                    },
+                                                    "ssh_fingerprint": {
+                                                        "type": "string",
+                                                        "description": "The SSH fingerprint of the key."
+                                                    },
+                                                    "ssh_public_key": {
+                                                        "type": "string",
+                                                        "description": "The SSH key."
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/default-response"
+                    }
+                },
+                "security": [
+                    {
+                        "oauth2ClientCredentials": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "comment"
+                                ],
+                                "properties": {
+                                    "comment": {
+                                        "type": "string",
+                                        "description": "The name of the key, appended as suffix.\n\n**Note**: Choose an easy to understand name for easier management."
+                                    }
+                                }
+                            },
+                            "examples": {
+                                "Example 1": {
+                                    "value": {
+                                        "comment": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v3/settings/keyring/keys/{keyId}": {
+            "post": {
+                "summary": "Retrieve a Key from the Keyring",
+                "tags": [
+                    "Keys"
+                ],
+                "description": "Returns a key from the keyring for SFTP key-based authentication.\n\n**Note:** This feature is in the pilot phase and currently available for a limited number of clients only. If you are interested in participating, contact Emarsys support.\n\n**Important:** Access to administrative endpoints is restricted. If you need access, contact Emarsys support.",
+                "operationId": "retrieveKeyFromKeyring",
+                "parameters": [
+                    {
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "name": "keyId",
+                        "in": "path",
+                        "description": "The identifier of the key.",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Succcessful call.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "description": "See the example or [Response Codes](https://dev.emarsys.com/docs/core-api-reference/cnyqzhdnbl7r2-http-200-errors) for details.",
+                                    "properties": {
+                                        "replyCode": {
+                                            "type": "integer",
+                                            "description": "The SAP Emarsys [response code](https://dev.emarsys.com/docs/core-api-reference/cnyqzhdnbl7r2-http-200-errors)."
+                                        },
+                                        "replyText": {
+                                            "type": "string",
+                                            "description": "The summary of the [response](https://dev.emarsys.com/docs/core-api-reference/cnyqzhdnbl7r2-http-200-errors)."
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "description": "The requested data.",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "string",
+                                                        "description": "The identifier of the key."
+                                                    },
+                                                    "comment": {
+                                                        "type": "string",
+                                                        "description": "The name of the key."
+                                                    },
+                                                    "created": {
+                                                        "type": "string",
+                                                        "description": "The creation date of the key."
+                                                    },
+                                                    "ssh_fingerprint": {
+                                                        "type": "string",
+                                                        "description": "The SSH fingerprint of the key."
+                                                    },
+                                                    "ssh_public_key": {
+                                                        "type": "string",
+                                                        "description": "The SSH key."
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/default-response"
+                    }
+                },
+                "security": [
+                    {
+                        "oauth2ClientCredentials": []
+                    }
+                ]
+            }
+        },
+        "/v3/keyring/keys": {
+            "post": {
+                "summary": "List Keys in the Keyring",
+                "tags": [
+                    "Keys"
+                ],
+                "description": "Lists all keys in the keyring for SFTP key-based authentication.\n\n**Note:** This feature is in the pilot phase and currently available for a limited number of clients only. If you are interested in participating, contact Emarsys support.\n\n**Important:** Access to administrative endpoints is restricted. If you need access, contact Emarsys support.",
+                "operationId": "listKeysInKeyring",
+                "responses": {
+                    "200": {
+                        "description": "Succcessful call.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "description": "See the example or [Response Codes](https://dev.emarsys.com/docs/core-api-reference/cnyqzhdnbl7r2-http-200-errors) for details.",
+                                    "properties": {
+                                        "replyCode": {
+                                            "type": "integer",
+                                            "description": "The SAP Emarsys [response code](https://dev.emarsys.com/docs/core-api-reference/cnyqzhdnbl7r2-http-200-errors)."
+                                        },
+                                        "replyText": {
+                                            "type": "string",
+                                            "description": "The summary of the [response](https://dev.emarsys.com/docs/core-api-reference/cnyqzhdnbl7r2-http-200-errors)."
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "description": "The requested data.",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "string",
+                                                        "description": "The identifier of the key."
+                                                    },
+                                                    "comment": {
+                                                        "type": "string",
+                                                        "description": "The name of the key."
+                                                    },
+                                                    "created": {
+                                                        "type": "string",
+                                                        "description": "The creation date of the key."
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/default-response"
+                    }
+                },
+                "security": [
+                    {
+                        "oauth2ClientCredentials": []
+                    }
+                ]
+            }
+        },
+        "/v3/keyring/keys/{keyId}/delete": {
+            "post": {
+                "summary": "Delete a Key from the Keyring",
+                "tags": [
+                    "Keys"
+                ],
+                "description": "Deletes a single key from the keyring.\n\n**Note:** This feature is in the pilot phase and currently available for a limited number of clients only. If you are interested in participating, contact Emarsys support.\n\n**Important:** Access to administrative endpoints is restricted. If you need access, contact Emarsys support.",
+                "operationId": "deleteKeyFromKeyring",
+                "parameters": [
+                    {
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "name": "keyId",
+                        "in": "path",
+                        "description": "The identifier of the key.",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/default-response"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/default-response"
+                    }
+                },
+                "security": [
+                    {
+                        "oauth2ClientCredentials": []
+                    }
+                ]
+            }
+        }
+    },
+    "security": [
+        {
+            "oauth2ClientCredentials": []
+        }
+    ],
+    "components": {
+        "schemas": {
+            "default-response-example": {
+                "title": "Default response",
+                "type": "object",
+                "description": "This is the generic SAP Emarsys response.",
+                "x-examples": {
+                    "Example 1": {
+                        "replyCode": 0,
+                        "replyText": "string",
+                        "data": {}
+                    }
+                },
+                "properties": {
+                    "replyCode": {
+                        "type": "integer",
+                        "description": "The Emarsys response code. Successful requests return 0; otherwise, see [errors](https://dev.emarsys.com/docs/core-api-reference/jir98la21pufy-http-400-errors)."
+                    },
+                    "replyText": {
+                        "type": "string",
+                        "description": "Additional informationon the status of the request."
+                    },
+                    "data": {
+                        "type": "object",
+                        "description": "Contains the requested data, if applicable."
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "oauth2ClientCredentials": {
+                "type": "oauth2",
+                "flows": {
+                    "clientCredentials": {
+                        "tokenUrl": "https://{host}/oauth2/token",
+                        "scopes": {}
+                    }
+                },
+                "description": "To use this API, you must first obtain an OAuth 2.0 client credentials token. After that you can use the token to call the API. For more information, see [Authentication](https://dev.emarsys.com/docs/emarsys-core-api-guides/branches/OAuth-2.0/b3c3a1eba8515-authentication-in-v3-api)."
+            }
+        },
+        "responses": {
+            "default-response": {
+                "description": "Response example:",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/default-response-example"
+                        },
+                        "examples": {
+                            "Example 1": {
+                                "value": {
+                                    "replyCode": 0,
+                                    "replyText": "string",
+                                    "data": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

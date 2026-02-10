@@ -1,1 +1,239 @@
-{"openapi":"3.0.3","info":{"description":"Use these endpoints to gather information about your available forms as well as trigger a contact registration form of your choosing on your website.","title":"SAP Emarsys Core - Forms","version":"v3"},"externalDocs":{"description":"For more information, please visit our official SAP Emarsys developer portal.","url":"https://dev.emarsys.com/docs/core-api-reference/91149f3689121-emarsys-core-api-forms-endpoint-batch"},"paths":{"/form":{"get":{"tags":["Forms"],"summary":"List Customer Forms","description":"Generates a list of all available forms designed to collect data from contacts, such as registration forms in a web page.","operationId":"listCustomerForms","responses":{"200":{"description":"Successful call.","content":{"application/json":{"schema":{"type":"object","properties":{"id":{"type":"integer","description":"The form identifier."},"type":{"type":"integer","minimum":1,"maximum":4,"description":"The form type.\n\n**Supported Values:**\n| Type | Description |\n| --- | --- |\n| 1 | General Registration Form |\n| 2 | Newsletter Registration Form |\n| 3 | Contact Us Form |\n| 4 | Change Profile Form |"}}}}}},"400":{"description":"Not found","$ref":"#/components/responses/default404"}},"security":[{"oauth2ClientCredentials":[]}]}},"/form/{formId}/trigger":{"post":{"tags":["Forms"],"summary":"Trigger Contact Registration","description":"Registers a contact in a form and triggers assigned campaigns. For details on the functionality, see [New Contact Registrations](https://help.sap.com/docs/SAP_EMARSYS/f8e2fafeea804018a954a8857d9dfff3/fdf58e2374c110148a8be1c821ba1f06.html).","operationId":"triggerContactRegistration","parameters":[{"schema":{"type":"integer"},"name":"formId","in":"path","description":"The identifier of the form as the source of registration.","required":true}],"responses":{"200":{"description":"Successful request.","content":{"application/json":{"schema":{"type":"object","x-examples":{"Example 1":{"replyCode":0,"replyText":"string","data":[{}]}},"properties":{"replyCode":{"type":"integer","description":"The Emarsys [response code](https://dev.emarsys.com/docs/core-api-reference/cnyqzhdnbl7r2-http-200-errors)."},"replyText":{"type":"string","description":"The summary of the response."},"data":{"type":"array","description":"The requested data.","items":{"type":"object"}}}}}}},"404":{"description":"Not found.","$ref":"#/components/responses/default404"}},"security":[{"oauth2ClientCredentials":[]}],"requestBody":{"content":{"application/json":{"schema":{"type":"object","x-examples":{"Example 1":{"key_id":"3","external_id":"mycontact@example.com"}},"required":["key_id","external_id"],"properties":{"key_id":{"type":"string","description":"The identifier of the field."},"external_id":{"type":"string","description":"The value of the contact identifiers to be registered."}}},"examples":{"Example 1":{"value":{"key_id":"string","external_id":"string"}}}}},"description":"The required information in the request body."}}}},"components":{"securitySchemes":{"oauth2ClientCredentials":{"type":"oauth2","flows":{"clientCredentials":{"tokenUrl":"https://{host}/oauth2/token","scopes":{},"refreshUrl":""}},"description":"To use this API, you must first obtain an OAuth 2.0 client credentials token. After that you can use the token to call the API. For more information, see [Authentication](https://dev.emarsys.com/docs/emarsys-core-api-guides/branches/OAuth-2.0/b3c3a1eba8515-authentication-in-v3-api)."}},"responses":{"default404":{"description":"Not found.","content":{"application/json":{"schema":{"$ref":"#/components/schemas/default-error-response"}}}}},"schemas":{"default-error-response":{"type":"object","x-examples":{"Example 1":{"replyCode":0,"replyText":"OK","data":{}}},"properties":{"replyCode":{"type":"integer","description":"The Emarsys response code. Successful requests return 0; otherwise, see [errors](https://dev.emarsys.com/docs/core-api-reference/jir98la21pufy-http-400-errors)."},"replyText":{"type":"string","description":"Additional information on the status of the request."},"data":{"type":"object","description":"Contains the requested data, if applicable."}}}}},"x-sap-shortText":"Use these endpoints to query a list of avaibale customer forms as well as trigger a contact registration.","servers":[{"url":"https://{host}/api/v3","description":"","variables":{"host":{"default":"api.emarsys.net","description":"This is the SAP Emarsys API server. "}}}],"security":[{"oauth2ClientCredentials":[]}],"tags":[{"name":"Forms"}]}
+{
+    "openapi": "3.0.3",
+    "info": {
+        "description": "Use these endpoints to gather information about your available forms as well as trigger a contact registration form of your choosing on your website.",
+        "title": "SAP Emarsys Core - Forms",
+        "version": "v3"
+    },
+    "externalDocs": {
+        "description": "For more information, please visit our official SAP Emarsys developer portal.",
+        "url": "https://dev.emarsys.com/docs/core-api-reference/91149f3689121-emarsys-core-api-forms-endpoint-batch"
+    },
+    "paths": {
+        "/form": {
+            "get": {
+                "tags": [
+                    "Forms"
+                ],
+                "summary": "List Customer Forms",
+                "description": "Generates a list of all available forms designed to collect data from contacts, such as registration forms in a web page.",
+                "operationId": "listCustomerForms",
+                "responses": {
+                    "200": {
+                        "description": "Successful call.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "description": "The form identifier."
+                                        },
+                                        "type": {
+                                            "type": "integer",
+                                            "minimum": 1,
+                                            "maximum": 4,
+                                            "description": "The form type.\n\n**Supported Values:**\n| Type | Description |\n| --- | --- |\n| 1 | General Registration Form |\n| 2 | Newsletter Registration Form |\n| 3 | Contact Us Form |\n| 4 | Change Profile Form |"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Not found",
+                        "$ref": "#/components/responses/default404"
+                    }
+                },
+                "security": [
+                    {
+                        "oauth2ClientCredentials": []
+                    }
+                ]
+            }
+        },
+        "/form/{formId}/trigger": {
+            "post": {
+                "tags": [
+                    "Forms"
+                ],
+                "summary": "Trigger Contact Registration",
+                "description": "Registers a contact in a form and triggers assigned campaigns. For details on the functionality, see [New Contact Registrations](https://help.sap.com/docs/SAP_EMARSYS/f8e2fafeea804018a954a8857d9dfff3/fdf58e2374c110148a8be1c821ba1f06.html).",
+                "operationId": "triggerContactRegistration",
+                "parameters": [
+                    {
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "name": "formId",
+                        "in": "path",
+                        "description": "The identifier of the form as the source of registration.",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful request.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "x-examples": {
+                                        "Example 1": {
+                                            "replyCode": 0,
+                                            "replyText": "string",
+                                            "data": [
+                                                {}
+                                            ]
+                                        }
+                                    },
+                                    "properties": {
+                                        "replyCode": {
+                                            "type": "integer",
+                                            "description": "The Emarsys [response code](https://dev.emarsys.com/docs/core-api-reference/cnyqzhdnbl7r2-http-200-errors)."
+                                        },
+                                        "replyText": {
+                                            "type": "string",
+                                            "description": "The summary of the response."
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "description": "The requested data.",
+                                            "items": {
+                                                "type": "object"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found.",
+                        "$ref": "#/components/responses/default404"
+                    }
+                },
+                "security": [
+                    {
+                        "oauth2ClientCredentials": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "x-examples": {
+                                    "Example 1": {
+                                        "key_id": "3",
+                                        "external_id": "mycontact@example.com"
+                                    }
+                                },
+                                "required": [
+                                    "key_id",
+                                    "external_id"
+                                ],
+                                "properties": {
+                                    "key_id": {
+                                        "type": "string",
+                                        "description": "The identifier of the field."
+                                    },
+                                    "external_id": {
+                                        "type": "string",
+                                        "description": "The value of the contact identifiers to be registered."
+                                    }
+                                }
+                            },
+                            "examples": {
+                                "Example 1": {
+                                    "value": {
+                                        "key_id": "string",
+                                        "external_id": "string"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "description": "The required information in the request body."
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "oauth2ClientCredentials": {
+                "type": "oauth2",
+                "flows": {
+                    "clientCredentials": {
+                        "tokenUrl": "https://{host}/oauth2/token",
+                        "scopes": {},
+                        "refreshUrl": ""
+                    }
+                },
+                "description": "To use this API, you must first obtain an OAuth 2.0 client credentials token. After that you can use the token to call the API. For more information, see [Authentication](https://dev.emarsys.com/docs/emarsys-core-api-guides/branches/OAuth-2.0/b3c3a1eba8515-authentication-in-v3-api)."
+            }
+        },
+        "responses": {
+            "default404": {
+                "description": "Not found.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/default-error-response"
+                        }
+                    }
+                }
+            }
+        },
+        "schemas": {
+            "default-error-response": {
+                "type": "object",
+                "x-examples": {
+                    "Example 1": {
+                        "replyCode": 0,
+                        "replyText": "OK",
+                        "data": {}
+                    }
+                },
+                "properties": {
+                    "replyCode": {
+                        "type": "integer",
+                        "description": "The Emarsys response code. Successful requests return 0; otherwise, see [errors](https://dev.emarsys.com/docs/core-api-reference/jir98la21pufy-http-400-errors)."
+                    },
+                    "replyText": {
+                        "type": "string",
+                        "description": "Additional information on the status of the request."
+                    },
+                    "data": {
+                        "type": "object",
+                        "description": "Contains the requested data, if applicable."
+                    }
+                }
+            }
+        }
+    },
+    "x-sap-shortText": "Use these endpoints to query a list of avaibale customer forms as well as trigger a contact registration.",
+    "servers": [
+        {
+            "url": "https://{host}/api/v3",
+            "description": "",
+            "variables": {
+                "host": {
+                    "default": "api.emarsys.net",
+                    "description": "This is the SAP Emarsys API server. "
+                }
+            }
+        }
+    ],
+    "security": [
+        {
+            "oauth2ClientCredentials": []
+        }
+    ],
+    "tags": [
+        {
+            "name": "Forms"
+        }
+    ]
+}

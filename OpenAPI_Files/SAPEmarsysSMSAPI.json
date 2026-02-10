@@ -1,1 +1,1066 @@
-{"x-sap-shortText":"The Emarsys SMS API helps you run SMS marketing campaigns.","x-sap-stateInfo":{"state":"Active"},"x-sap-api-type":"REST","swagger":"2.0","info":{"version":"1.0","title":"SAP Emarsys SMS API","description":"The Emarsys SMS API enables you to handle your SMS marketing campaigns through an API."},"consumes":["application/json","application/xml"],"produces":["application/json","application/xml"],"basePath":"/api/sms","schemes":["https"],"securityDefinitions":{"X-WSSE":{"name":"X-WSSE","type":"apiKey","in":"header"}},"x-servers":[{"url":"api.emarsys.net"}],"externalDocs":{"description":"The official up-todate documentation of the Emarsys SMS API.","url":"https://dev.emarsys.com/docs/sms-api"},"paths":{"/campaigns":{"get":{"operationId":"LIST-sms-campaigns","summary":"List SMS Campaigns","tags":["SMS API"],"description":"Returns a list of ongoing SMS campaigns.\n\n**Example**\n\n`https://api.emarsys.net/api/sms/campaigns?limit=1000&offset=0`","parameters":[{"name":"limit","in":"query","description":"Limits the number of SMS campaigns returned in the list.","required":true,"type":"integer"},{"name":"offset","in":"query","description":"Used to skip a number of SMS campaigns before results are fetched (remember that campaigns are listed in a *latest first* fashion).","required":false,"type":"integer"}],"responses":{"200":{"description":"","schema":{"type":"array","description":"","items":{"type":"object","properties":{"id":{"type":"integer","description":"The SMS campaign identifier."},"type":{"type":"string","enum":["ac","batch"],"description":"Indicates whether the campaign is part of an AC program."},"status":{"type":"string","description":"The SMS campaign status.\n\n- If **type** is set to *ac*,  **status** may only take the values *draft* and *triggered*.\n\n- If **type** is set to *batch*, the possible **status** values are *draft*, *scheduled*, *triggered*, *sending*, *report_receiving*, and *done*.","enum":["draft","scheduled","triggered","sending","report_receiving","done"]},"title":{"type":"string","description":"The title of the SMS campaign."},"sender":{"type":"string","description":"The message sender."},"message":{"type":"string","description":"The body text of the message."},"deduplicate_recipients":{"type":"boolean","description":"Indicates whether the logic should consider contact duplication."},"unsubscribe":{"type":"object","description":"","required":["enabled"],"properties":{"enabled":{"type":"boolean","description":"Indicates whether unsubscribing is enabled, that is, the Opt-out button is part of the messages sent."},"title":{"type":"string","description":"The text used to trigger the Unsubscribe action."},"text":{"type":"string","description":"The text asking for unsubscription confirmation."},"button_text":{"type":"string","description":"The text of the button used for confirming the unsubscribe request."},"after_text":{"type":"string","description":"The text confirming successful unsubscription."}}},"source_type":{"type":"string","description":"Indicates the recipient source:\n- segment\n- contact list\n- AC program"},"source_id":{"type":"string","pattern":"^[0-9]+","description":"Indicates the ID of the recipient source."},"last_failed_at":{"type":["string","null"],"format":"date-time"},"created_at":{"type":"string","description":"Indicates when the SMS campaign was created.","format":"date-time"},"scheduled_to":{"type":["string","null"],"format":"date-time"}},"required":["id","type","status","title","sender","message","deduplicate_recipients","unsubscribe","source_type","source_id","created_at"]}}},"400":{"description":"The error codes vary between 400 and 500.","schema":{"type":"object","properties":{"code":{"type":"integer"},"message":{"type":"string"}}}}}},"post":{"operationId":"POST-sms-campaign","summary":"Create SMS Campaign","tags":["SMS API"],"description":"Lets you create an SMS campaign.\\n\\nMake sure the following conditions apply:\\n- You are using all the mandatory parameters;\\n- The\\trecipient source\nexists in your Suite (in case of batch SMS sending);\\n- **source_type** and\n**source_id** must be *null* or undefined in case of AC type requests;\\n-\nTWIG template syntax is used.","parameters":[{"name":"body","in":"body","description":"The name of the SMS campaign.","schema":{"type":"object","properties":{"type":{"type":"string","enum":["ac","batch"],"description":"Indicates whether the campaign is part of an AC program."},"title":{"type":"string","description":"The title of the SMS campaign."},"sender":{"type":"string","description":"The message sender."},"message":{"type":"string","description":"The body text of the message."},"deduplicate_recipients":{"type":"boolean","description":"Indicates whether the logic should consider contact duplication."},"source_type":{"type":"string","description":"Indicates the recipient source:\n- segment\n- contact list\n- AC program"},"source_id":{"type":"string","pattern":"^[0-9]+","description":"The ID of the recipient source."},"unsubscribe":{"type":"object","description":"Indicates whether the SMS will contain an unsubscribe link.","required":["enabled"],"properties":{"enabled":{"type":"boolean","description":"Indicates whether unsubscribing is enabled, that is, whether the Opt-out button is part of the messages sent."},"template_id":{"type":["null","integer"],"description":"The ID of the message template."},"title":{"type":"string","description":"The text used to trigger the Unsubscribe action."},"text":{"type":"string","description":"The text asking for unsubscription confirmation."},"button_text":{"type":"string","description":"The text of the button used for confirming the unsubscribe request."},"after_text":{"type":"string","description":"The text confirming successful unsubscription."}}}},"required":["type","title","sender","message","deduplicate_recipients","source_type","source_id","unsubscribe"],"example":{"type":"batch","title":"Hello World","sender":"test account","message":"test message","deduplicate_recipients":true,"source_type":"segment","source_id":"100025715","unsubscribe":{"enabled":true,"template_id":1234,"title":"Unsubscribe","text":"Are you sure you want to opt out of our SMS campaigns?","button_text":"Opt-out","after_text":"You've been removed from our SMS campaign list."}}}}],"responses":{"200":{"description":"OK","schema":{"type":"object","properties":{"id":{"type":"integer","description":"The SMS campaign identifier."},"type":{"type":"string","description":"Indicates whether the campaign is part of an AC program.","enum":["ac","batch"]},"status":{"type":"string","description":"The status of the campaign. "},"title":{"type":"string","description":"The title of the SMS campaign."},"sender":{"type":"string","description":"The sender configured for the messages in this campaign."},"message":{"type":"string","description":"The body text of the message."},"deduplicate_recipients":{"type":"boolean","description":"Indicates whether the logic should consider contact duplication."},"unsubscribe":{"type":"object","required":["enabled"],"properties":{"enabled":{"type":"boolean","description":"Indicates whether unsubscribing is enabled, that is, the Opt-out button is part of the messages sent."},"title":{"type":"string","description":"The text used to trigger the Unsubscribe action."},"text":{"type":"string","description":"The text asking for unsubscription confirmation."},"button_text":{"type":"string","description":"The text of the button used for confirming the unsubscribe request."},"after_text":{"type":"string","description":"The text confirming successful unsubscription."}}},"created_at":{"type":"string","description":"Indicates when the SMS campaign was created."},"scheduled_to":{"type":"null","description":"Indicates the date and time when the campaign will be launched."},"source_type":{"type":"string","description":"Indicates the recipient source:\n- segment\n- contact list\n- AC program"},"source_id":{"type":"string","pattern":"^[0-9]+","description":"Indicates the ID of the recipient source."}},"required":["id","type","status","title","sender","message","deduplicate_recipients","unsubscribe","created_at","scheduled_to","source_type","source_id"]}},"400":{"description":"The error codes vary between 400 and 500.","schema":{"type":"object","properties":{"code":{"type":"integer"},"message":{"type":"string"}}}}}}},"/campaigns/{campaignId}":{"parameters":[{"name":"campaignId","in":"path","required":true,"type":"string"}],"get":{"operationId":"GET-sms-campaigns","summary":"Get SMS Campaign","tags":["SMS API"],"description":"Returns the SMS campaign with the specified campaign ID.","responses":{"200":{"description":"OK","schema":{"type":"object","properties":{"id":{"type":"integer","description":"The SMS campaign identifier."},"type":{"type":"string","enum":["ac","batch"],"description":"Indicates whether the campaign is part of an AC program."},"status":{"type":"string","enum":["draft","scheduled","triggered","sending","report_receiving","done"],"description":"The SMS campaign status.\n\n- If **type** is set to *ac*,  **status** may only take the values *draft* and *triggered*.\n\n- If **type** is set to *batch*, the possible **status** values are *draft*, *scheduled*, *triggered*, *sending*, *report_receiving*, and *done*.\n"},"title":{"type":"string","description":"The title of the SMS campaign."},"sender":{"type":"string","description":"The message sender."},"message":{"type":"string","description":"The body text of the message."},"deduplicate_recipients":{"type":"boolean","description":"Indicates whether the logic should consider contact duplication."},"unsubscribe":{"type":"object","description":"","required":["enabled"],"properties":{"enabled":{"type":"boolean","description":"Indicates whether unsubscribing is enabled, that is, the Opt-out button is part of the messages sent."},"title":{"type":"string","description":"The text used to trigger the Unsubscribe action."},"text":{"type":"string","description":"The text asking for unsubscription confirmation."},"button_text":{"type":"string","description":"The text on the button used for confirming the unsubscribe request."},"after_text":{"type":"string","description":"The text confirming successful unsubscription."}}},"created_at":{"type":"string","description":"Indicates when the SMS campaign was created.","format":"date-time"},"scheduled_to":{"type":["string","null"],"format":"date-time","description":"Indicates the scheduled launche date of the campaign."}},"required":["id","type","status","title","sender","message","deduplicate_recipients","unsubscribe","created_at"]}},"400":{"description":"The error codes vary between 400 and 500.","schema":{"type":"object","properties":{"code":{"type":"integer"},"message":{"type":"string"}}}}}},"put":{"operationId":"PUT-sms-campaigns","summary":"Update SMS Campaigns","tags":["SMS API"],"description":"\"Lets you update an existing SMS campaign.\\n\\n---\\n**Mandatory\nparameters**\\n\\nAt least one of the following:\\n\\n- **type**: the type can\nonly be changed from *ac* to *batch* if no active AC program uses the campaign\\n-\n**title**\\n- **sender**\\n-\\t**message**\\n-\\t**deduplicate_recipients**\\n-\\t**source_type**\n(**source_type** and **source_id** must be present in the suite in case of\n*batch* campaigns, and must be *null* or undefined for campaigns with **type**\n*ac*)\\n-\\t**source_id**\\n-\\t**unsubscribe.enabled**\\n-\\t**unsubscribe.title**\\n-\\t**unsubscribe.text**\\n-\\t**unsubscribe.button_text**\\n-\\t**unsubscribe.after_text**\\n\\n---\\n**Forbidden\nparameters**\\n\\nIn order to change the following parameters, a **Launch a\nCampaign** request must be made:\\n-\\t**status**\\n- **scheduled_to**\\n\\n---\\n**IMPORTANT**\\nMake\nsure the following conditions apply:\\n- The recipient source exists in the\nSuite if **source_type**|**source_id** is updated.\\n-\\ta campaign can only\nbe updated while it is in either *draft** or *scheduled* state. If the campaign\nis in *scheduled* state, the **scheduled_to** date must be at least 1 minute\nin the future.\\n- TWIG template syntax is used.\"","parameters":[{"name":"body","in":"body","description":"The name of the campaign to be updated.","schema":{"type":"object","properties":{"type":{"type":"string","description":"Indicates whether the campaign is part of an AC program.","enum":["ac","batch"]},"title":{"type":"string","description":"The title of the SMS campaign."},"sender":{"type":"string","description":"The message sender."},"message":{"type":"string","description":"The body text of the message."},"deduplicate_recipients":{"type":"boolean","description":"Indicates whether the logic should consider contact duplication."},"source_type":{"type":"string","description":"Indicates the recipient source:\n- segment\n- contact list\n- AC program\n\n"},"source_id":{"type":"string","pattern":"^[0-9]+","description":"The ID of the recipient source."},"unsubscribe":{"type":"object","required":["enabled"],"properties":{"enabled":{"type":"boolean","description":"Indicates whether the SMS will contain an unsubscribe link."},"title":{"type":"string","description":"The text used to trigger the Unsubscribe action."},"text":{"type":"string","description":"The text asking for unsubscription confirmation."},"button_text":{"type":"string","description":"The text of the button used for confirming the unsubscribe request."},"after_text":{"type":"string","description":"The text confirming successful unsubscription."}}}},"required":["sender","message","deduplicate_recipients","source_type","source_id","unsubscribe"],"example":{"type":"batch","title":"test","sender":"test","message":"test","deduplicate_recipients":true,"source_type":"segment","source_id":"100025715","unsubscribe":{"enabled":true,"title":"Unsubscribe","text":"Are you sure you want to opt out of our SMS campains?","button_text":"Opt-out","after_text":"You've been removed from our SMS campaign list."}}}}],"responses":{"200":{"description":"","schema":{"type":"object","properties":{"id":{"type":"integer","description":"The SMS campaign identifier."},"status":{"type":"string","description":"The status of the SMS campaign."},"title":{"type":"string","description":"The title of the SMS campaign."},"sender":{"type":"string","description":"The message sender."},"message":{"type":"string","description":"The body text of the message."},"deduplicate_recipients":{"type":"boolean","description":"Indicates whether the logic should consider contact duplication."},"unsubscribe":{"type":"object","properties":{"enabled":{"type":"boolean","description":"\nIndicates whether the SMS will contain an unsubscribe link."},"title":{"type":"string","description":"The text used to trigger the Unsubscribe action."},"text":{"type":"string","description":"The text asking for unsubscription confirmation."},"button_text":{"type":"string","description":"The text of the button used for confirming the unsubscribe request."},"after_text":{"type":"string","description":"The text confirming successful unsubscription."}}},"created_at":{"type":"string","description":"Indicates when the SMS campaign was created."},"scheduled_to":{"type":["string","null"],"description":"Indicates the scheduled launche date of the campaign.","format":"date-time"},"source_type":{"type":"string","description":"Indicates the recipient source:\n- segment\n- contact list\n- AC program"},"source_id":{"type":"string","description":"The ID of the  recipient source.","pattern":"^[0-9]+"}}}},"400":{"description":"The error codes vary between 400 and 500.","schema":{"type":"object","properties":{"code":{"type":"integer"},"message":{"type":"string"}},"required":["code","message"]}}}},"patch":{"operationId":"launch-sms-campaigns","summary":"Launch SMS Campaign","tags":["SMS API"],"description":"\"Lets you launch/schedule a *batch* campaign, or cancel its scheduled launch by updating the value of the **status** attribute the following way:\\r\\n\\r\\n**1.**\nTo launch the campaign at a specific date (schedule a campaign):\\r\\n\\r\\n-\n{\\r\\n  \\\"**status**\\\": \\\"*scheduled*\\\",\\r\\n  \\r\\n  \\\"**scheduled_to**\\\": \\\"2018-02-28T13:15:00.000Z\\\"\\r\\n}\\r\\n\\r\\n**2.**\nTo launch the campaign immediately:\\r\\n\\r\\n - {\\r\\n  \\\"**status**\\\": \\\"*triggered*\\\"\\r\\n}\\r\\n\\r\\n**3.**\nTo cancel a scheduled launch:\\r\\n\\r\\n- {\\r\\n  \\\"**status**\\\": \\\"*draft*\\\"\\r\\n}\\r\\n___\\r\\n**Mandatory\nparameters:**\\r\\n- **customerId**\\r\\n- **campaignId**\\r\\n- **status** (*draft*\nor *triggered*)\\r\\n___\\r\\nCampaigns with **type** *AC* must be triggered/scheduled/canceled\nthrough an AC program.\\r\\n\\r\\n**Note**: Only campaigns in *scheduled* state\ncan be canceled.\"","parameters":[{"name":"body","in":"body","description":"The name of the campaign to be launched.","schema":{"type":"object","properties":{"status":{"type":"string","enum":["scheduled","triggered","draft"],"description":"The status of the SMS campaign:\n- **scheduled**: scheduled to a future date.\n - **triggered**: for launching the campaign right away.\n- **draft**: used for cancelling a scheduled launch."},"scheduled_to":{"type":"string","format":"date-time","description":"Should be a future date in UTC format."}},"required":["status"],"example":{"status":"scheduled","scheduled_to":"2018-02-28T13:15:00.000Z"}}}],"responses":{"200":{"description":"","schema":{"type":"object","properties":{"id":{"type":"integer","description":"The SMS campaign identifier."},"status":{"type":"string","description":"The status of the SMS campaign.","enum":["draft","scheduled","triggered"]},"title":{"type":"string","description":"The title of the SMS campaign."},"sender":{"type":"string","description":"The message sender."},"message":{"type":"string","description":"The body text of the message."},"deduplicate_recipients":{"type":"boolean","description":"Indicates whether the logic should consider contact duplication."},"unsubscribe":{"type":"object","required":["enabled"],"properties":{"enabled":{"type":"boolean","description":"\nIndicates whether the SMS will contain an unsubscribe link."},"title":{"type":"string","description":"The text used to trigger the Unsubscribe action."},"text":{"type":"string","description":"The text asking for unsubscription confirmation."},"button_text":{"type":"string","description":"The text of the button used for confirming the unsubscribe request."},"after_text":{"type":"string","description":"The text confirming successful unsubscription."}}},"created_at":{"type":"string","description":"Indicates when the SMS campaign was created."},"scheduled_to":{"type":["string","null"],"description":"Indicates the scheduled launche date of the campaign.","format":"date-time"},"source_type":{"type":"string","description":"Indicates the recipient source:\n- segment\n- contact list\n- AC program"},"source_id":{"type":"string","description":"The ID of the  recipient source.","pattern":"^[0-9]+"}},"required":["id","status","title","sender","message","deduplicate_recipients","unsubscribe","created_at","scheduled_to","source_type","source_id"]}},"400":{"description":"The error codes vary between 400 and 500.","schema":{"type":"object","properties":{"code":{"type":"integer"},"message":{"type":"string","description":"The error message."}}}}}}},"/inbound-messages":{"get":{"operationId":"query-inbound-messages","summary":"Query Inbound SMS Messages","tags":["SMS API"],"description":"Fetches inbound SMS messages in **latest first** order.\n\n**Example:**\n\n``api.emarsys.net/api/sms/inbound-messages?limit=500&offset=100?startDate=2018-02-28T13%3A15%3A00.000Z&endDate=2018-03-05T00%3A00%3A00.000Z``","parameters":[{"name":"{limit}","in":"query","description":"The maximum number of inbound SMS  fetched by request.","type":"string","default":1000,"pattern":"^[0-9]+"},{"name":"{offset}","in":"query","description":"The logic will start fetching after skipping the number of inbound sms messages specified here.","type":"string","default":0,"pattern":"^[0-9]+"},{"name":"{startDate}","in":"query","description":"All fetched inbound SMS messages will be newer than the date specified here.\nIt must be URL-encoded.","type":"string","format":"date-time","default":"nothing"},{"name":"{endDate}","in":"query","description":"All fetched inbound SMS messages will be older than the date specified here.\nIt must be URL-encoded.","type":"string","format":"date-time","default":"now"}],"responses":{"200":{"description":"","schema":{"type":"array","items":{"type":"object","properties":{"id":{"type":"integer","description":"The inbound message ID."},"customer_id":{"type":"integer","description":"Your customer ID at Emarsys."},"contact_id":{"type":"integer","description":"The internal contact identifier for your customer. For details, see **Concepts** > **Contacts**."},"shortcode":{"type":"string","description":"A short string of numbers identified with your brand.","pattern":"^[0-9]+"},"is_unsubscribe":{"type":"boolean","description":"Indicates whether the sender opted out from SMS campaigns.\nIf the message contains the word **STOP**, the value will be *true*."},"inbound_number":{"type":"string","description":"The number where the SMS was received from.","pattern":"^[0-9]+"},"message_body":{"type":"string","description":"The body text of the message received."}},"required":["id","customer_id","contact_id","shortcode","is_unsubscribe","inbound_number","message_body"]}}}}}}},"definitions":{"unsubscribe":{"title":"unsubscribe-basic","type":"object","description":"","required":["enabled"],"properties":{"enabled":{"type":"boolean","description":"Indicates whether unsubscribing is enabled, that is, the Opt-out button is part of the messages sent."},"title":{"type":"string","description":"The text used to trigger the Unsubscribe action."},"text":{"type":"string","description":"The text asking for unsubscription confirmation."},"button_text":{"type":"string","description":"The text of the button used for confirming the unsubscribe request."},"after_text":{"type":"string","description":"The text confirming successful unsubscription."}}}},"tags":[{"name":"SMS API"}]}
+{
+    "x-sap-shortText": "The Emarsys SMS API helps you run SMS marketing campaigns.",
+    "x-sap-stateInfo": {
+        "state": "Active"
+    },
+    "x-sap-api-type": "REST",
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0",
+        "title": "SAP Emarsys SMS API",
+        "description": "The Emarsys SMS API enables you to handle your SMS marketing campaigns through an API."
+    },
+    "consumes": [
+        "application/json",
+        "application/xml"
+    ],
+    "produces": [
+        "application/json",
+        "application/xml"
+    ],
+    "basePath": "/api/sms",
+    "schemes": [
+        "https"
+    ],
+    "securityDefinitions": {
+        "X-WSSE": {
+            "name": "X-WSSE",
+            "type": "apiKey",
+            "in": "header"
+        }
+    },
+    "x-servers": [
+        {
+            "url": "api.emarsys.net"
+        }
+    ],
+    "externalDocs": {
+        "description": "The official up-todate documentation of the Emarsys SMS API.",
+        "url": "https://dev.emarsys.com/docs/sms-api"
+    },
+    "paths": {
+        "/campaigns": {
+            "get": {
+                "operationId": "LIST-sms-campaigns",
+                "summary": "List SMS Campaigns",
+                "tags": [
+                    "SMS API"
+                ],
+                "description": "Returns a list of ongoing SMS campaigns.\n\n**Example**\n\n`https://api.emarsys.net/api/sms/campaigns?limit=1000&offset=0`",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Limits the number of SMS campaigns returned in the list.",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "offset",
+                        "in": "query",
+                        "description": "Used to skip a number of SMS campaigns before results are fetched (remember that campaigns are listed in a *latest first* fashion).",
+                        "required": false,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "description": "",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "type": "integer",
+                                        "description": "The SMS campaign identifier."
+                                    },
+                                    "type": {
+                                        "type": "string",
+                                        "enum": [
+                                            "ac",
+                                            "batch"
+                                        ],
+                                        "description": "Indicates whether the campaign is part of an AC program."
+                                    },
+                                    "status": {
+                                        "type": "string",
+                                        "description": "The SMS campaign status.\n\n- If **type** is set to *ac*,  **status** may only take the values *draft* and *triggered*.\n\n- If **type** is set to *batch*, the possible **status** values are *draft*, *scheduled*, *triggered*, *sending*, *report_receiving*, and *done*.",
+                                        "enum": [
+                                            "draft",
+                                            "scheduled",
+                                            "triggered",
+                                            "sending",
+                                            "report_receiving",
+                                            "done"
+                                        ]
+                                    },
+                                    "title": {
+                                        "type": "string",
+                                        "description": "The title of the SMS campaign."
+                                    },
+                                    "sender": {
+                                        "type": "string",
+                                        "description": "The message sender."
+                                    },
+                                    "message": {
+                                        "type": "string",
+                                        "description": "The body text of the message."
+                                    },
+                                    "deduplicate_recipients": {
+                                        "type": "boolean",
+                                        "description": "Indicates whether the logic should consider contact duplication."
+                                    },
+                                    "unsubscribe": {
+                                        "type": "object",
+                                        "description": "",
+                                        "required": [
+                                            "enabled"
+                                        ],
+                                        "properties": {
+                                            "enabled": {
+                                                "type": "boolean",
+                                                "description": "Indicates whether unsubscribing is enabled, that is, the Opt-out button is part of the messages sent."
+                                            },
+                                            "title": {
+                                                "type": "string",
+                                                "description": "The text used to trigger the Unsubscribe action."
+                                            },
+                                            "text": {
+                                                "type": "string",
+                                                "description": "The text asking for unsubscription confirmation."
+                                            },
+                                            "button_text": {
+                                                "type": "string",
+                                                "description": "The text of the button used for confirming the unsubscribe request."
+                                            },
+                                            "after_text": {
+                                                "type": "string",
+                                                "description": "The text confirming successful unsubscription."
+                                            }
+                                        }
+                                    },
+                                    "source_type": {
+                                        "type": "string",
+                                        "description": "Indicates the recipient source:\n- segment\n- contact list\n- AC program"
+                                    },
+                                    "source_id": {
+                                        "type": "string",
+                                        "pattern": "^[0-9]+",
+                                        "description": "Indicates the ID of the recipient source."
+                                    },
+                                    "last_failed_at": {
+                                        "type": [
+                                            "string",
+                                            "null"
+                                        ],
+                                        "format": "date-time"
+                                    },
+                                    "created_at": {
+                                        "type": "string",
+                                        "description": "Indicates when the SMS campaign was created.",
+                                        "format": "date-time"
+                                    },
+                                    "scheduled_to": {
+                                        "type": [
+                                            "string",
+                                            "null"
+                                        ],
+                                        "format": "date-time"
+                                    }
+                                },
+                                "required": [
+                                    "id",
+                                    "type",
+                                    "status",
+                                    "title",
+                                    "sender",
+                                    "message",
+                                    "deduplicate_recipients",
+                                    "unsubscribe",
+                                    "source_type",
+                                    "source_id",
+                                    "created_at"
+                                ]
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "The error codes vary between 400 and 500.",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "operationId": "POST-sms-campaign",
+                "summary": "Create SMS Campaign",
+                "tags": [
+                    "SMS API"
+                ],
+                "description": "Lets you create an SMS campaign.\\n\\nMake sure the following conditions apply:\\n- You are using all the mandatory parameters;\\n- The\\trecipient source\nexists in your Suite (in case of batch SMS sending);\\n- **source_type** and\n**source_id** must be *null* or undefined in case of AC type requests;\\n-\nTWIG template syntax is used.",
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "The name of the SMS campaign.",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "enum": [
+                                        "ac",
+                                        "batch"
+                                    ],
+                                    "description": "Indicates whether the campaign is part of an AC program."
+                                },
+                                "title": {
+                                    "type": "string",
+                                    "description": "The title of the SMS campaign."
+                                },
+                                "sender": {
+                                    "type": "string",
+                                    "description": "The message sender."
+                                },
+                                "message": {
+                                    "type": "string",
+                                    "description": "The body text of the message."
+                                },
+                                "deduplicate_recipients": {
+                                    "type": "boolean",
+                                    "description": "Indicates whether the logic should consider contact duplication."
+                                },
+                                "source_type": {
+                                    "type": "string",
+                                    "description": "Indicates the recipient source:\n- segment\n- contact list\n- AC program"
+                                },
+                                "source_id": {
+                                    "type": "string",
+                                    "pattern": "^[0-9]+",
+                                    "description": "The ID of the recipient source."
+                                },
+                                "unsubscribe": {
+                                    "type": "object",
+                                    "description": "Indicates whether the SMS will contain an unsubscribe link.",
+                                    "required": [
+                                        "enabled"
+                                    ],
+                                    "properties": {
+                                        "enabled": {
+                                            "type": "boolean",
+                                            "description": "Indicates whether unsubscribing is enabled, that is, whether the Opt-out button is part of the messages sent."
+                                        },
+                                        "template_id": {
+                                            "type": [
+                                                "null",
+                                                "integer"
+                                            ],
+                                            "description": "The ID of the message template."
+                                        },
+                                        "title": {
+                                            "type": "string",
+                                            "description": "The text used to trigger the Unsubscribe action."
+                                        },
+                                        "text": {
+                                            "type": "string",
+                                            "description": "The text asking for unsubscription confirmation."
+                                        },
+                                        "button_text": {
+                                            "type": "string",
+                                            "description": "The text of the button used for confirming the unsubscribe request."
+                                        },
+                                        "after_text": {
+                                            "type": "string",
+                                            "description": "The text confirming successful unsubscription."
+                                        }
+                                    }
+                                }
+                            },
+                            "required": [
+                                "type",
+                                "title",
+                                "sender",
+                                "message",
+                                "deduplicate_recipients",
+                                "source_type",
+                                "source_id",
+                                "unsubscribe"
+                            ],
+                            "example": {
+                                "type": "batch",
+                                "title": "Hello World",
+                                "sender": "test account",
+                                "message": "test message",
+                                "deduplicate_recipients": true,
+                                "source_type": "segment",
+                                "source_id": "100025715",
+                                "unsubscribe": {
+                                    "enabled": true,
+                                    "template_id": 1234,
+                                    "title": "Unsubscribe",
+                                    "text": "Are you sure you want to opt out of our SMS campaigns?",
+                                    "button_text": "Opt-out",
+                                    "after_text": "You've been removed from our SMS campaign list."
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "integer",
+                                    "description": "The SMS campaign identifier."
+                                },
+                                "type": {
+                                    "type": "string",
+                                    "description": "Indicates whether the campaign is part of an AC program.",
+                                    "enum": [
+                                        "ac",
+                                        "batch"
+                                    ]
+                                },
+                                "status": {
+                                    "type": "string",
+                                    "description": "The status of the campaign. "
+                                },
+                                "title": {
+                                    "type": "string",
+                                    "description": "The title of the SMS campaign."
+                                },
+                                "sender": {
+                                    "type": "string",
+                                    "description": "The sender configured for the messages in this campaign."
+                                },
+                                "message": {
+                                    "type": "string",
+                                    "description": "The body text of the message."
+                                },
+                                "deduplicate_recipients": {
+                                    "type": "boolean",
+                                    "description": "Indicates whether the logic should consider contact duplication."
+                                },
+                                "unsubscribe": {
+                                    "type": "object",
+                                    "required": [
+                                        "enabled"
+                                    ],
+                                    "properties": {
+                                        "enabled": {
+                                            "type": "boolean",
+                                            "description": "Indicates whether unsubscribing is enabled, that is, the Opt-out button is part of the messages sent."
+                                        },
+                                        "title": {
+                                            "type": "string",
+                                            "description": "The text used to trigger the Unsubscribe action."
+                                        },
+                                        "text": {
+                                            "type": "string",
+                                            "description": "The text asking for unsubscription confirmation."
+                                        },
+                                        "button_text": {
+                                            "type": "string",
+                                            "description": "The text of the button used for confirming the unsubscribe request."
+                                        },
+                                        "after_text": {
+                                            "type": "string",
+                                            "description": "The text confirming successful unsubscription."
+                                        }
+                                    }
+                                },
+                                "created_at": {
+                                    "type": "string",
+                                    "description": "Indicates when the SMS campaign was created."
+                                },
+                                "scheduled_to": {
+                                    "type": "null",
+                                    "description": "Indicates the date and time when the campaign will be launched."
+                                },
+                                "source_type": {
+                                    "type": "string",
+                                    "description": "Indicates the recipient source:\n- segment\n- contact list\n- AC program"
+                                },
+                                "source_id": {
+                                    "type": "string",
+                                    "pattern": "^[0-9]+",
+                                    "description": "Indicates the ID of the recipient source."
+                                }
+                            },
+                            "required": [
+                                "id",
+                                "type",
+                                "status",
+                                "title",
+                                "sender",
+                                "message",
+                                "deduplicate_recipients",
+                                "unsubscribe",
+                                "created_at",
+                                "scheduled_to",
+                                "source_type",
+                                "source_id"
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "The error codes vary between 400 and 500.",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/campaigns/{campaignId}": {
+            "parameters": [
+                {
+                    "name": "campaignId",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "operationId": "GET-sms-campaigns",
+                "summary": "Get SMS Campaign",
+                "tags": [
+                    "SMS API"
+                ],
+                "description": "Returns the SMS campaign with the specified campaign ID.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "integer",
+                                    "description": "The SMS campaign identifier."
+                                },
+                                "type": {
+                                    "type": "string",
+                                    "enum": [
+                                        "ac",
+                                        "batch"
+                                    ],
+                                    "description": "Indicates whether the campaign is part of an AC program."
+                                },
+                                "status": {
+                                    "type": "string",
+                                    "enum": [
+                                        "draft",
+                                        "scheduled",
+                                        "triggered",
+                                        "sending",
+                                        "report_receiving",
+                                        "done"
+                                    ],
+                                    "description": "The SMS campaign status.\n\n- If **type** is set to *ac*,  **status** may only take the values *draft* and *triggered*.\n\n- If **type** is set to *batch*, the possible **status** values are *draft*, *scheduled*, *triggered*, *sending*, *report_receiving*, and *done*.\n"
+                                },
+                                "title": {
+                                    "type": "string",
+                                    "description": "The title of the SMS campaign."
+                                },
+                                "sender": {
+                                    "type": "string",
+                                    "description": "The message sender."
+                                },
+                                "message": {
+                                    "type": "string",
+                                    "description": "The body text of the message."
+                                },
+                                "deduplicate_recipients": {
+                                    "type": "boolean",
+                                    "description": "Indicates whether the logic should consider contact duplication."
+                                },
+                                "unsubscribe": {
+                                    "type": "object",
+                                    "description": "",
+                                    "required": [
+                                        "enabled"
+                                    ],
+                                    "properties": {
+                                        "enabled": {
+                                            "type": "boolean",
+                                            "description": "Indicates whether unsubscribing is enabled, that is, the Opt-out button is part of the messages sent."
+                                        },
+                                        "title": {
+                                            "type": "string",
+                                            "description": "The text used to trigger the Unsubscribe action."
+                                        },
+                                        "text": {
+                                            "type": "string",
+                                            "description": "The text asking for unsubscription confirmation."
+                                        },
+                                        "button_text": {
+                                            "type": "string",
+                                            "description": "The text on the button used for confirming the unsubscribe request."
+                                        },
+                                        "after_text": {
+                                            "type": "string",
+                                            "description": "The text confirming successful unsubscription."
+                                        }
+                                    }
+                                },
+                                "created_at": {
+                                    "type": "string",
+                                    "description": "Indicates when the SMS campaign was created.",
+                                    "format": "date-time"
+                                },
+                                "scheduled_to": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "format": "date-time",
+                                    "description": "Indicates the scheduled launche date of the campaign."
+                                }
+                            },
+                            "required": [
+                                "id",
+                                "type",
+                                "status",
+                                "title",
+                                "sender",
+                                "message",
+                                "deduplicate_recipients",
+                                "unsubscribe",
+                                "created_at"
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "The error codes vary between 400 and 500.",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "operationId": "PUT-sms-campaigns",
+                "summary": "Update SMS Campaigns",
+                "tags": [
+                    "SMS API"
+                ],
+                "description": "\"Lets you update an existing SMS campaign.\\n\\n---\\n**Mandatory\nparameters**\\n\\nAt least one of the following:\\n\\n- **type**: the type can\nonly be changed from *ac* to *batch* if no active AC program uses the campaign\\n-\n**title**\\n- **sender**\\n-\\t**message**\\n-\\t**deduplicate_recipients**\\n-\\t**source_type**\n(**source_type** and **source_id** must be present in the suite in case of\n*batch* campaigns, and must be *null* or undefined for campaigns with **type**\n*ac*)\\n-\\t**source_id**\\n-\\t**unsubscribe.enabled**\\n-\\t**unsubscribe.title**\\n-\\t**unsubscribe.text**\\n-\\t**unsubscribe.button_text**\\n-\\t**unsubscribe.after_text**\\n\\n---\\n**Forbidden\nparameters**\\n\\nIn order to change the following parameters, a **Launch a\nCampaign** request must be made:\\n-\\t**status**\\n- **scheduled_to**\\n\\n---\\n**IMPORTANT**\\nMake\nsure the following conditions apply:\\n- The recipient source exists in the\nSuite if **source_type**|**source_id** is updated.\\n-\\ta campaign can only\nbe updated while it is in either *draft** or *scheduled* state. If the campaign\nis in *scheduled* state, the **scheduled_to** date must be at least 1 minute\nin the future.\\n- TWIG template syntax is used.\"",
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "The name of the campaign to be updated.",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "description": "Indicates whether the campaign is part of an AC program.",
+                                    "enum": [
+                                        "ac",
+                                        "batch"
+                                    ]
+                                },
+                                "title": {
+                                    "type": "string",
+                                    "description": "The title of the SMS campaign."
+                                },
+                                "sender": {
+                                    "type": "string",
+                                    "description": "The message sender."
+                                },
+                                "message": {
+                                    "type": "string",
+                                    "description": "The body text of the message."
+                                },
+                                "deduplicate_recipients": {
+                                    "type": "boolean",
+                                    "description": "Indicates whether the logic should consider contact duplication."
+                                },
+                                "source_type": {
+                                    "type": "string",
+                                    "description": "Indicates the recipient source:\n- segment\n- contact list\n- AC program\n\n"
+                                },
+                                "source_id": {
+                                    "type": "string",
+                                    "pattern": "^[0-9]+",
+                                    "description": "The ID of the recipient source."
+                                },
+                                "unsubscribe": {
+                                    "type": "object",
+                                    "required": [
+                                        "enabled"
+                                    ],
+                                    "properties": {
+                                        "enabled": {
+                                            "type": "boolean",
+                                            "description": "Indicates whether the SMS will contain an unsubscribe link."
+                                        },
+                                        "title": {
+                                            "type": "string",
+                                            "description": "The text used to trigger the Unsubscribe action."
+                                        },
+                                        "text": {
+                                            "type": "string",
+                                            "description": "The text asking for unsubscription confirmation."
+                                        },
+                                        "button_text": {
+                                            "type": "string",
+                                            "description": "The text of the button used for confirming the unsubscribe request."
+                                        },
+                                        "after_text": {
+                                            "type": "string",
+                                            "description": "The text confirming successful unsubscription."
+                                        }
+                                    }
+                                }
+                            },
+                            "required": [
+                                "sender",
+                                "message",
+                                "deduplicate_recipients",
+                                "source_type",
+                                "source_id",
+                                "unsubscribe"
+                            ],
+                            "example": {
+                                "type": "batch",
+                                "title": "test",
+                                "sender": "test",
+                                "message": "test",
+                                "deduplicate_recipients": true,
+                                "source_type": "segment",
+                                "source_id": "100025715",
+                                "unsubscribe": {
+                                    "enabled": true,
+                                    "title": "Unsubscribe",
+                                    "text": "Are you sure you want to opt out of our SMS campains?",
+                                    "button_text": "Opt-out",
+                                    "after_text": "You've been removed from our SMS campaign list."
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "integer",
+                                    "description": "The SMS campaign identifier."
+                                },
+                                "status": {
+                                    "type": "string",
+                                    "description": "The status of the SMS campaign."
+                                },
+                                "title": {
+                                    "type": "string",
+                                    "description": "The title of the SMS campaign."
+                                },
+                                "sender": {
+                                    "type": "string",
+                                    "description": "The message sender."
+                                },
+                                "message": {
+                                    "type": "string",
+                                    "description": "The body text of the message."
+                                },
+                                "deduplicate_recipients": {
+                                    "type": "boolean",
+                                    "description": "Indicates whether the logic should consider contact duplication."
+                                },
+                                "unsubscribe": {
+                                    "type": "object",
+                                    "properties": {
+                                        "enabled": {
+                                            "type": "boolean",
+                                            "description": "\nIndicates whether the SMS will contain an unsubscribe link."
+                                        },
+                                        "title": {
+                                            "type": "string",
+                                            "description": "The text used to trigger the Unsubscribe action."
+                                        },
+                                        "text": {
+                                            "type": "string",
+                                            "description": "The text asking for unsubscription confirmation."
+                                        },
+                                        "button_text": {
+                                            "type": "string",
+                                            "description": "The text of the button used for confirming the unsubscribe request."
+                                        },
+                                        "after_text": {
+                                            "type": "string",
+                                            "description": "The text confirming successful unsubscription."
+                                        }
+                                    }
+                                },
+                                "created_at": {
+                                    "type": "string",
+                                    "description": "Indicates when the SMS campaign was created."
+                                },
+                                "scheduled_to": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "description": "Indicates the scheduled launche date of the campaign.",
+                                    "format": "date-time"
+                                },
+                                "source_type": {
+                                    "type": "string",
+                                    "description": "Indicates the recipient source:\n- segment\n- contact list\n- AC program"
+                                },
+                                "source_id": {
+                                    "type": "string",
+                                    "description": "The ID of the  recipient source.",
+                                    "pattern": "^[0-9]+"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "The error codes vary between 400 and 500.",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "message": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "code",
+                                "message"
+                            ]
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "operationId": "launch-sms-campaigns",
+                "summary": "Launch SMS Campaign",
+                "tags": [
+                    "SMS API"
+                ],
+                "description": "\"Lets you launch/schedule a *batch* campaign, or cancel its scheduled launch by updating the value of the **status** attribute the following way:\\r\\n\\r\\n**1.**\nTo launch the campaign at a specific date (schedule a campaign):\\r\\n\\r\\n-\n{\\r\\n  \\\"**status**\\\": \\\"*scheduled*\\\",\\r\\n  \\r\\n  \\\"**scheduled_to**\\\": \\\"2018-02-28T13:15:00.000Z\\\"\\r\\n}\\r\\n\\r\\n**2.**\nTo launch the campaign immediately:\\r\\n\\r\\n - {\\r\\n  \\\"**status**\\\": \\\"*triggered*\\\"\\r\\n}\\r\\n\\r\\n**3.**\nTo cancel a scheduled launch:\\r\\n\\r\\n- {\\r\\n  \\\"**status**\\\": \\\"*draft*\\\"\\r\\n}\\r\\n___\\r\\n**Mandatory\nparameters:**\\r\\n- **customerId**\\r\\n- **campaignId**\\r\\n- **status** (*draft*\nor *triggered*)\\r\\n___\\r\\nCampaigns with **type** *AC* must be triggered/scheduled/canceled\nthrough an AC program.\\r\\n\\r\\n**Note**: Only campaigns in *scheduled* state\ncan be canceled.\"",
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "The name of the campaign to be launched.",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "status": {
+                                    "type": "string",
+                                    "enum": [
+                                        "scheduled",
+                                        "triggered",
+                                        "draft"
+                                    ],
+                                    "description": "The status of the SMS campaign:\n- **scheduled**: scheduled to a future date.\n - **triggered**: for launching the campaign right away.\n- **draft**: used for cancelling a scheduled launch."
+                                },
+                                "scheduled_to": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "description": "Should be a future date in UTC format."
+                                }
+                            },
+                            "required": [
+                                "status"
+                            ],
+                            "example": {
+                                "status": "scheduled",
+                                "scheduled_to": "2018-02-28T13:15:00.000Z"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "integer",
+                                    "description": "The SMS campaign identifier."
+                                },
+                                "status": {
+                                    "type": "string",
+                                    "description": "The status of the SMS campaign.",
+                                    "enum": [
+                                        "draft",
+                                        "scheduled",
+                                        "triggered"
+                                    ]
+                                },
+                                "title": {
+                                    "type": "string",
+                                    "description": "The title of the SMS campaign."
+                                },
+                                "sender": {
+                                    "type": "string",
+                                    "description": "The message sender."
+                                },
+                                "message": {
+                                    "type": "string",
+                                    "description": "The body text of the message."
+                                },
+                                "deduplicate_recipients": {
+                                    "type": "boolean",
+                                    "description": "Indicates whether the logic should consider contact duplication."
+                                },
+                                "unsubscribe": {
+                                    "type": "object",
+                                    "required": [
+                                        "enabled"
+                                    ],
+                                    "properties": {
+                                        "enabled": {
+                                            "type": "boolean",
+                                            "description": "\nIndicates whether the SMS will contain an unsubscribe link."
+                                        },
+                                        "title": {
+                                            "type": "string",
+                                            "description": "The text used to trigger the Unsubscribe action."
+                                        },
+                                        "text": {
+                                            "type": "string",
+                                            "description": "The text asking for unsubscription confirmation."
+                                        },
+                                        "button_text": {
+                                            "type": "string",
+                                            "description": "The text of the button used for confirming the unsubscribe request."
+                                        },
+                                        "after_text": {
+                                            "type": "string",
+                                            "description": "The text confirming successful unsubscription."
+                                        }
+                                    }
+                                },
+                                "created_at": {
+                                    "type": "string",
+                                    "description": "Indicates when the SMS campaign was created."
+                                },
+                                "scheduled_to": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "description": "Indicates the scheduled launche date of the campaign.",
+                                    "format": "date-time"
+                                },
+                                "source_type": {
+                                    "type": "string",
+                                    "description": "Indicates the recipient source:\n- segment\n- contact list\n- AC program"
+                                },
+                                "source_id": {
+                                    "type": "string",
+                                    "description": "The ID of the  recipient source.",
+                                    "pattern": "^[0-9]+"
+                                }
+                            },
+                            "required": [
+                                "id",
+                                "status",
+                                "title",
+                                "sender",
+                                "message",
+                                "deduplicate_recipients",
+                                "unsubscribe",
+                                "created_at",
+                                "scheduled_to",
+                                "source_type",
+                                "source_id"
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "The error codes vary between 400 and 500.",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "message": {
+                                    "type": "string",
+                                    "description": "The error message."
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/inbound-messages": {
+            "get": {
+                "operationId": "query-inbound-messages",
+                "summary": "Query Inbound SMS Messages",
+                "tags": [
+                    "SMS API"
+                ],
+                "description": "Fetches inbound SMS messages in **latest first** order.\n\n**Example:**\n\n``api.emarsys.net/api/sms/inbound-messages?limit=500&offset=100?startDate=2018-02-28T13%3A15%3A00.000Z&endDate=2018-03-05T00%3A00%3A00.000Z``",
+                "parameters": [
+                    {
+                        "name": "{limit}",
+                        "in": "query",
+                        "description": "The maximum number of inbound SMS  fetched by request.",
+                        "type": "string",
+                        "default": 1000,
+                        "pattern": "^[0-9]+"
+                    },
+                    {
+                        "name": "{offset}",
+                        "in": "query",
+                        "description": "The logic will start fetching after skipping the number of inbound sms messages specified here.",
+                        "type": "string",
+                        "default": 0,
+                        "pattern": "^[0-9]+"
+                    },
+                    {
+                        "name": "{startDate}",
+                        "in": "query",
+                        "description": "All fetched inbound SMS messages will be newer than the date specified here.\nIt must be URL-encoded.",
+                        "type": "string",
+                        "format": "date-time",
+                        "default": "nothing"
+                    },
+                    {
+                        "name": "{endDate}",
+                        "in": "query",
+                        "description": "All fetched inbound SMS messages will be older than the date specified here.\nIt must be URL-encoded.",
+                        "type": "string",
+                        "format": "date-time",
+                        "default": "now"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "type": "integer",
+                                        "description": "The inbound message ID."
+                                    },
+                                    "customer_id": {
+                                        "type": "integer",
+                                        "description": "Your customer ID at Emarsys."
+                                    },
+                                    "contact_id": {
+                                        "type": "integer",
+                                        "description": "The internal contact identifier for your customer. For details, see **Concepts** > **Contacts**."
+                                    },
+                                    "shortcode": {
+                                        "type": "string",
+                                        "description": "A short string of numbers identified with your brand.",
+                                        "pattern": "^[0-9]+"
+                                    },
+                                    "is_unsubscribe": {
+                                        "type": "boolean",
+                                        "description": "Indicates whether the sender opted out from SMS campaigns.\nIf the message contains the word **STOP**, the value will be *true*."
+                                    },
+                                    "inbound_number": {
+                                        "type": "string",
+                                        "description": "The number where the SMS was received from.",
+                                        "pattern": "^[0-9]+"
+                                    },
+                                    "message_body": {
+                                        "type": "string",
+                                        "description": "The body text of the message received."
+                                    }
+                                },
+                                "required": [
+                                    "id",
+                                    "customer_id",
+                                    "contact_id",
+                                    "shortcode",
+                                    "is_unsubscribe",
+                                    "inbound_number",
+                                    "message_body"
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "unsubscribe": {
+            "title": "unsubscribe-basic",
+            "type": "object",
+            "description": "",
+            "required": [
+                "enabled"
+            ],
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Indicates whether unsubscribing is enabled, that is, the Opt-out button is part of the messages sent."
+                },
+                "title": {
+                    "type": "string",
+                    "description": "The text used to trigger the Unsubscribe action."
+                },
+                "text": {
+                    "type": "string",
+                    "description": "The text asking for unsubscription confirmation."
+                },
+                "button_text": {
+                    "type": "string",
+                    "description": "The text of the button used for confirming the unsubscribe request."
+                },
+                "after_text": {
+                    "type": "string",
+                    "description": "The text confirming successful unsubscription."
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "SMS API"
+        }
+    ]
+}

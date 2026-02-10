@@ -1,1 +1,473 @@
-{"openapi":"3.0.3","info":{"title":"SAP Emarsys Sales Data","description":"With this endpoint you can send your sales data through a direct, API-based integration to SAP Emarsys, without the need to create CSVs.\nBy using JSON objects with the Sales Data API, the process of uploading sales data became much easier then before.","version":"1.0.0"},"x-sap-shortText":"This endpoint allows you to to have a direct, API-based connection to SAP Emarsys where you can upload your sales data directly.","servers":[{"url":"https://{host}/api/salesdata/v1","variables":{"host":{"default":"api.emarsys.net"}}}],"components":{"securitySchemes":{"oAuth2ClientCredentials":{"type":"oauth2","description":"To use this API, you must first obtain an OAuth 2.0 client credentials token. After that you can use the token to call the API.","flows":{"clientCredentials":{"tokenUrl":"https://{authHost}/oauth2/token","scopes":{}}}}},"schemas":{"CustomFields":{"type":"object","description":"An object containing a key-value pair for a custom field","properties":{"key":{"type":"string","description":"The key of the custom field.","example":"paymentMethod"},"value":{"type":"object","description":"The value of the custom field.","additionalProperties":{"oneOf":[{"type":"string"},{"type":"number"},{"type":"string"}]},"example":"creditCard"}},"example":{"paymentMethod":"creditCard","deliveryDate":"2024-01-01T10:10:10.000Z","discount":0.8}},"TransactionItem":{"type":"object","properties":{"productId":{"type":"string","description":"The unique identifier for a product","example":"abc-123"},"quantity":{"type":"number","description":"The quantity of the product","example":23.2},"amountInAccountCurrency":{"type":"number","description":"Total amount of the item in account currency","example":345.67},"amountInTransactionCurrency":{"type":"number","description":"Total amount of the item in transaction currency","example":345.67},"customFields":{"$ref":"#/components/schemas/CustomFields"}},"required":["productId","quantity","amountInAccountCurrency","amountInTransactionCurrency"],"example":{"productId":"abc-123","quantity":23,"amountInAccountCurrency":345.67,"amountInTransactionCurrency":345.67,"customFields":{"paymentMethod":"creditCard","deliveryDate":"2024-01-01T10:10:10.000Z","discount":0.8}}},"Transaction":{"type":"object","properties":{"transactionType":{"type":"string","enum":["order","refund"],"description":"Type of the transaction. Either order or refund.","example":"order"},"transactionId":{"type":"string","format":"string","description":"The identifier for the transaction.","example":"7a520b51-11bc-4fee-833e-a7ef51adcdb3"},"externalContactIdType":{"type":"string","description":"The type of the external contact identifier.","example":"email"},"externalContactId":{"type":"string","description":"The external contact identifier.","example":"asdf@email.com"},"accountCurrency":{"type":"string","description":"The central currency of the account.","example":"EUR"},"transactionCurrency":{"type":"string","description":"The currency of the transaction.","example":"EUR"},"transactionCreatedAt":{"type":"string","format":"date-time","description":"The date and time when the transaction was created.","example":"2024-01-01T10:10:10.000Z"},"transactionChangedAt":{"type":"string","format":"date-time","description":"The date and time when the transaction was last changed.","example":"2024-01-01T10:10:10.000Z"},"externalStoreId":{"type":"string","description":"The identifier of the store where the transaction was made.","example":"123"},"salesChannel":{"type":"string","description":"The sales channel where the transaction was made.","example":"online"},"referencedOrderId":{"type":"string","description":"The identifier of the order that is being refunded. Only required for refund transactions.","example":"7a520b51-11bc-4fee-833e-a7ef51adcdb3"},"items":{"type":"array","description":"The items of the transaction.","items":{"$ref":"#/components/schemas/TransactionItem"}}},"required":["transactionType","transactionId","externalContactIdType","externalContactId","accountCurrency","transactionCurrency","transactionCreatedAt","transactionChangedAt","items"],"example":{"transactionType":"order","transactionId":"7a520b51-11bc-4fee-833e-a7ef51adcdb3","externalContactIdType":"email","externalContactId":"abc@email.com","accountCurrency":"EUR","transactionCurrency":"EUR","transactionCreatedAt":"2024-01-01T10:10:10.000Z","transactionChangedAt":"2024-01-01T10:10:10.000Z","items":[{"productId":"abc-123","quantity":23,"amountInAccountCurrency":345.67,"amountInTransactionCurrency":345.67,"customFields":{"paymentMethod":"creditCard","deliveryDate":"2024-01-01T10:10:10.000Z","discount":0.8}}]}},"Transactions":{"type":"object","properties":{"salesTransactions":{"type":"array","items":{"$ref":"#/components/schemas/Transaction"}}},"required":["salesTransactions"],"example":{"transactions":[{"transactionType":"order","transactionId":"7a520b51-11bc-4fee-833e-a7ef51adcdb3","externalContactIdType":"email","externalContactId":"asdf@email.com","accountCurrency":"EUR","transactionCurrency":"EUR","transactionCreatedAt":"2024-01-01T10:10:10.000Z","transactionChangedAt":"2024-01-01T10:10:10.000Z","externalStoreId":"s123","salesChannel":"online","items":[{"productId":"abc-123","quantity":23,"amountInAccountCurrency":345.67,"amountInTransactionCurrency":345.67}]},{"transactionType":"refund","transactionId":"asdfreth-r45t-gk6l-22l3-vmcnd34l","referencedOrderId":"7a520b51-11bc-4fee-833e-a7ef51adcdb3","externalContactIdType":"email","externalContactId":"asdf@email.com","accountCurrency":"EUR","transactionCurrency":"EUR","transactionCreatedAt":"2024-01-03T10:10:10.000Z","transactionChangedAt":"2024-01-03T10:10:10.000Z","externalStoreId":"s123","salesChannel":"online","items":[{"productId":"abc-123","quantity":-23,"amountInAccountCurrency":-345.67,"amountInTransactionCurrency":-345.67,"customFields":{"refundReason":"wrongSize","refundDate":"2024-01-03T10:10:10.000Z"}}]}]}},"InnerError":{"type":"object","properties":{"path":{"type":"array","items":{"additionalProperties":{"anyOf":[{"type":"string"},{"type":"number"}]}}}}},"ErrorDetail":{"type":"object","required":["code","message"],"properties":{"message":{"type":"string"},"code":{"type":"string"},"target":{"type":"string"}}},"Error":{"type":"object","properties":{"message":{"type":"string"},"code":{"type":"string"},"target":{"type":"string"},"details":{"type":"array","items":{"$ref":"#/components/schemas/ErrorDetail"}},"innererror":{"type":"object","$ref":"#/components/schemas/InnerError"}},"required":["code","message"]},"ErrorResponseWithRequestId":{"type":"object","description":"An object explainging the error","properties":{"requestId":{"type":"string","example":"759a31e5-debf-4630-9009-88f1c79bc287"},"error":{"$ref":"#/components/schemas/Error"}},"required":["requestId","error"]},"ErrorResponse":{"type":"object","description":"An object explaining the error","properties":{"error":{"$ref":"#/components/schemas/Error"}},"required":["error"]}}},"paths":{"/transactions":{"post":{"operationId":"postSalesTransactions","summary":"Persist sales transactions","description":"This endpoint can create new sales transactions.","tags":["Sales Transactions"],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/Transactions"}}}},"responses":{"202":{"description":"Request accepted for processing","content":{"application/json":{"schema":{"type":"object","properties":{"requestId":{"type":"string","example":"sales_transactions_2024-01-01T10:10:10.000Z"}},"required":["requestId"]}}}},"422":{"description":"Payload validation failed","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponseWithRequestId"}}}},"401":{"description":"Authentication failed","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"404":{"description":"Customer is not enabled or its configuration was not found","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"500":{"description":"The server encountered an unexpected condition that prevented it from fulfilling the request.","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"503":{"description":"The server is currently unable to handle the request due to a temporary overload or scheduled maintenance, which will likely be alleviated after some delay.","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}}}}}}}
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "SAP Emarsys Sales Data",
+        "description": "With this endpoint you can send your sales data through a direct, API-based integration to SAP Emarsys, without the need to create CSVs.\nBy using JSON objects with the Sales Data API, the process of uploading sales data became much easier then before.",
+        "version": "1.0.0"
+    },
+    "x-sap-shortText": "This endpoint allows you to to have a direct, API-based connection to SAP Emarsys where you can upload your sales data directly.",
+    "servers": [
+        {
+            "url": "https://{host}/api/salesdata/v1",
+            "variables": {
+                "host": {
+                    "default": "api.emarsys.net"
+                }
+            }
+        }
+    ],
+    "components": {
+        "securitySchemes": {
+            "oAuth2ClientCredentials": {
+                "type": "oauth2",
+                "description": "To use this API, you must first obtain an OAuth 2.0 client credentials token. After that you can use the token to call the API.",
+                "flows": {
+                    "clientCredentials": {
+                        "tokenUrl": "https://{authHost}/oauth2/token",
+                        "scopes": {}
+                    }
+                }
+            }
+        },
+        "schemas": {
+            "CustomFields": {
+                "type": "object",
+                "description": "An object containing a key-value pair for a custom field",
+                "properties": {
+                    "key": {
+                        "type": "string",
+                        "description": "The key of the custom field.",
+                        "example": "paymentMethod"
+                    },
+                    "value": {
+                        "type": "object",
+                        "description": "The value of the custom field.",
+                        "additionalProperties": {
+                            "oneOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "number"
+                                },
+                                {
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "example": "creditCard"
+                    }
+                },
+                "example": {
+                    "paymentMethod": "creditCard",
+                    "deliveryDate": "2024-01-01T10:10:10.000Z",
+                    "discount": 0.8
+                }
+            },
+            "TransactionItem": {
+                "type": "object",
+                "properties": {
+                    "productId": {
+                        "type": "string",
+                        "description": "The unique identifier for a product",
+                        "example": "abc-123"
+                    },
+                    "quantity": {
+                        "type": "number",
+                        "description": "The quantity of the product",
+                        "example": 23.2
+                    },
+                    "amountInAccountCurrency": {
+                        "type": "number",
+                        "description": "Total amount of the item in account currency",
+                        "example": 345.67
+                    },
+                    "amountInTransactionCurrency": {
+                        "type": "number",
+                        "description": "Total amount of the item in transaction currency",
+                        "example": 345.67
+                    },
+                    "customFields": {
+                        "$ref": "#/components/schemas/CustomFields"
+                    }
+                },
+                "required": [
+                    "productId",
+                    "quantity",
+                    "amountInAccountCurrency",
+                    "amountInTransactionCurrency"
+                ],
+                "example": {
+                    "productId": "abc-123",
+                    "quantity": 23,
+                    "amountInAccountCurrency": 345.67,
+                    "amountInTransactionCurrency": 345.67,
+                    "customFields": {
+                        "paymentMethod": "creditCard",
+                        "deliveryDate": "2024-01-01T10:10:10.000Z",
+                        "discount": 0.8
+                    }
+                }
+            },
+            "Transaction": {
+                "type": "object",
+                "properties": {
+                    "transactionType": {
+                        "type": "string",
+                        "enum": [
+                            "order",
+                            "refund"
+                        ],
+                        "description": "Type of the transaction. Either order or refund.",
+                        "example": "order"
+                    },
+                    "transactionId": {
+                        "type": "string",
+                        "format": "string",
+                        "description": "The identifier for the transaction.",
+                        "example": "7a520b51-11bc-4fee-833e-a7ef51adcdb3"
+                    },
+                    "externalContactIdType": {
+                        "type": "string",
+                        "description": "The type of the external contact identifier.",
+                        "example": "email"
+                    },
+                    "externalContactId": {
+                        "type": "string",
+                        "description": "The external contact identifier.",
+                        "example": "asdf@email.com"
+                    },
+                    "accountCurrency": {
+                        "type": "string",
+                        "description": "The central currency of the account.",
+                        "example": "EUR"
+                    },
+                    "transactionCurrency": {
+                        "type": "string",
+                        "description": "The currency of the transaction.",
+                        "example": "EUR"
+                    },
+                    "transactionCreatedAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "The date and time when the transaction was created.",
+                        "example": "2024-01-01T10:10:10.000Z"
+                    },
+                    "transactionChangedAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "The date and time when the transaction was last changed.",
+                        "example": "2024-01-01T10:10:10.000Z"
+                    },
+                    "externalStoreId": {
+                        "type": "string",
+                        "description": "The identifier of the store where the transaction was made.",
+                        "example": "123"
+                    },
+                    "salesChannel": {
+                        "type": "string",
+                        "description": "The sales channel where the transaction was made.",
+                        "example": "online"
+                    },
+                    "referencedOrderId": {
+                        "type": "string",
+                        "description": "The identifier of the order that is being refunded. Only required for refund transactions.",
+                        "example": "7a520b51-11bc-4fee-833e-a7ef51adcdb3"
+                    },
+                    "items": {
+                        "type": "array",
+                        "description": "The items of the transaction.",
+                        "items": {
+                            "$ref": "#/components/schemas/TransactionItem"
+                        }
+                    }
+                },
+                "required": [
+                    "transactionType",
+                    "transactionId",
+                    "externalContactIdType",
+                    "externalContactId",
+                    "accountCurrency",
+                    "transactionCurrency",
+                    "transactionCreatedAt",
+                    "transactionChangedAt",
+                    "items"
+                ],
+                "example": {
+                    "transactionType": "order",
+                    "transactionId": "7a520b51-11bc-4fee-833e-a7ef51adcdb3",
+                    "externalContactIdType": "email",
+                    "externalContactId": "abc@email.com",
+                    "accountCurrency": "EUR",
+                    "transactionCurrency": "EUR",
+                    "transactionCreatedAt": "2024-01-01T10:10:10.000Z",
+                    "transactionChangedAt": "2024-01-01T10:10:10.000Z",
+                    "items": [
+                        {
+                            "productId": "abc-123",
+                            "quantity": 23,
+                            "amountInAccountCurrency": 345.67,
+                            "amountInTransactionCurrency": 345.67,
+                            "customFields": {
+                                "paymentMethod": "creditCard",
+                                "deliveryDate": "2024-01-01T10:10:10.000Z",
+                                "discount": 0.8
+                            }
+                        }
+                    ]
+                }
+            },
+            "Transactions": {
+                "type": "object",
+                "properties": {
+                    "salesTransactions": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Transaction"
+                        }
+                    }
+                },
+                "required": [
+                    "salesTransactions"
+                ],
+                "example": {
+                    "transactions": [
+                        {
+                            "transactionType": "order",
+                            "transactionId": "7a520b51-11bc-4fee-833e-a7ef51adcdb3",
+                            "externalContactIdType": "email",
+                            "externalContactId": "asdf@email.com",
+                            "accountCurrency": "EUR",
+                            "transactionCurrency": "EUR",
+                            "transactionCreatedAt": "2024-01-01T10:10:10.000Z",
+                            "transactionChangedAt": "2024-01-01T10:10:10.000Z",
+                            "externalStoreId": "s123",
+                            "salesChannel": "online",
+                            "items": [
+                                {
+                                    "productId": "abc-123",
+                                    "quantity": 23,
+                                    "amountInAccountCurrency": 345.67,
+                                    "amountInTransactionCurrency": 345.67
+                                }
+                            ]
+                        },
+                        {
+                            "transactionType": "refund",
+                            "transactionId": "asdfreth-r45t-gk6l-22l3-vmcnd34l",
+                            "referencedOrderId": "7a520b51-11bc-4fee-833e-a7ef51adcdb3",
+                            "externalContactIdType": "email",
+                            "externalContactId": "asdf@email.com",
+                            "accountCurrency": "EUR",
+                            "transactionCurrency": "EUR",
+                            "transactionCreatedAt": "2024-01-03T10:10:10.000Z",
+                            "transactionChangedAt": "2024-01-03T10:10:10.000Z",
+                            "externalStoreId": "s123",
+                            "salesChannel": "online",
+                            "items": [
+                                {
+                                    "productId": "abc-123",
+                                    "quantity": -23,
+                                    "amountInAccountCurrency": -345.67,
+                                    "amountInTransactionCurrency": -345.67,
+                                    "customFields": {
+                                        "refundReason": "wrongSize",
+                                        "refundDate": "2024-01-03T10:10:10.000Z"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            "InnerError": {
+                "type": "object",
+                "properties": {
+                    "path": {
+                        "type": "array",
+                        "items": {
+                            "additionalProperties": {
+                                "anyOf": [
+                                    {
+                                        "type": "string"
+                                    },
+                                    {
+                                        "type": "number"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            },
+            "ErrorDetail": {
+                "type": "object",
+                "required": [
+                    "code",
+                    "message"
+                ],
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    },
+                    "code": {
+                        "type": "string"
+                    },
+                    "target": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Error": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    },
+                    "code": {
+                        "type": "string"
+                    },
+                    "target": {
+                        "type": "string"
+                    },
+                    "details": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ErrorDetail"
+                        }
+                    },
+                    "innererror": {
+                        "type": "object",
+                        "$ref": "#/components/schemas/InnerError"
+                    }
+                },
+                "required": [
+                    "code",
+                    "message"
+                ]
+            },
+            "ErrorResponseWithRequestId": {
+                "type": "object",
+                "description": "An object explainging the error",
+                "properties": {
+                    "requestId": {
+                        "type": "string",
+                        "example": "759a31e5-debf-4630-9009-88f1c79bc287"
+                    },
+                    "error": {
+                        "$ref": "#/components/schemas/Error"
+                    }
+                },
+                "required": [
+                    "requestId",
+                    "error"
+                ]
+            },
+            "ErrorResponse": {
+                "type": "object",
+                "description": "An object explaining the error",
+                "properties": {
+                    "error": {
+                        "$ref": "#/components/schemas/Error"
+                    }
+                },
+                "required": [
+                    "error"
+                ]
+            }
+        }
+    },
+    "paths": {
+        "/transactions": {
+            "post": {
+                "operationId": "postSalesTransactions",
+                "summary": "Persist sales transactions",
+                "description": "This endpoint can create new sales transactions.",
+                "tags": [
+                    "Sales Transactions"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Transactions"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "202": {
+                        "description": "Request accepted for processing",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "requestId": {
+                                            "type": "string",
+                                            "example": "sales_transactions_2024-01-01T10:10:10.000Z"
+                                        }
+                                    },
+                                    "required": [
+                                        "requestId"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Payload validation failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponseWithRequestId"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Authentication failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Customer is not enabled or its configuration was not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "The server encountered an unexpected condition that prevented it from fulfilling the request.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "503": {
+                        "description": "The server is currently unable to handle the request due to a temporary overload or scheduled maintenance, which will likely be alleviated after some delay.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

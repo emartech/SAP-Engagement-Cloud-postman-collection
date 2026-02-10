@@ -7,37 +7,37 @@
     },
     "x-sap-shortText": "The Loyalty Contact API helps you establish and run your customer loyalty program.",
     "x-sap-stateInfo": {
-     "state": "Deprecated",
-     "deprecationDate": "2023-06-02",
-     "successorApi": "https://api.sap.com/api/EmarsysLoyaltyv4"
+        "state": "Deprecated",
+        "deprecationDate": "2023-06-02",
+        "successorApi": "https://api.sap.com/api/EmarsysLoyaltyv4"
     },
-      "produces": [
-    "application/json"
-  ],
-  "consumes": [
-    "application/json"
-  ],
-  "securityDefinitions": {
-    "apikey": {
-      "type": "apiKey",
-      "in": "header",
-      "name": "x-api-key",
-      "description": "The security scheme of SAP Emarsys Loyalty API needs an API key named x-api-key to be sent in the request header the following way: `x-api-key: <key>`."
-    }    
-  },
-  "x-sap-api-type": "REST",
-    "x-servers": [
-      {
-        "description": "SAP Emarsys Loyalty Contact API v4 base path",
-        "url": "https://contact-api.loyalsys.io/api/v2"
-      }
+    "produces": [
+        "application/json"
     ],
-  "security": [
-    {
-      "apikey": [ ]
-    }
-  ],
-    "host": "hostname",  
+    "consumes": [
+        "application/json"
+    ],
+    "securityDefinitions": {
+        "apikey": {
+            "type": "apiKey",
+            "in": "header",
+            "name": "x-api-key",
+            "description": "The security scheme of SAP Emarsys Loyalty API needs an API key named x-api-key to be sent in the request header the following way: `x-api-key: <key>`."
+        }
+    },
+    "x-sap-api-type": "REST",
+    "x-servers": [
+        {
+            "description": "SAP Emarsys Loyalty Contact API v4 base path",
+            "url": "https://contact-api.loyalsys.io/api/v2"
+        }
+    ],
+    "security": [
+        {
+            "apikey": []
+        }
+    ],
+    "host": "hostname",
     "schemes": [
         "https"
     ],
@@ -46,7 +46,7 @@
             "post": {
                 "operationId": "joinContact",
                 "summary": "Join contact",
-                "tags": [                    
+                "tags": [
                     "Contacts"
                 ],
                 "description": "Join contact to loyalty program, create contact if required.",
@@ -99,7 +99,7 @@
             "get": {
                 "operationId": "getContactActivities",
                 "summary": "Get the contact's activity information",
-                "tags": [                    
+                "tags": [
                     "Contacts"
                 ],
                 "description": "Get the contact's activity information based on their actions or purchases.",
@@ -151,7 +151,7 @@
             "delete": {
                 "operationId": "deleteContact",
                 "summary": "Delete contact",
-                "tags": [                    
+                "tags": [
                     "Contacts"
                 ],
                 "description": "Deletes the contact including all their activities and rewards. IMPORTANT - This cannot be undone.",
@@ -183,7 +183,7 @@
             "get": {
                 "operationId": "getContact",
                 "summary": "Get a contact's loyalty information",
-                "tags": [                    
+                "tags": [
                     "Contacts"
                 ],
                 "description": "Pass the contact's Id (as identified by the shop, e.g. email, shop customer Id, ...) and get all their loyalty information.",
@@ -251,7 +251,7 @@
             "put": {
                 "operationId": "changePlan",
                 "summary": "Change a contact's plan",
-                "tags": [                    
+                "tags": [
                     "Contacts"
                 ],
                 "description": "Change the contact's loyalty plan e.g. from B2B to B2C. Only relevant for customers that have multiple plans.",
@@ -310,7 +310,7 @@
             "get": {
                 "operationId": "getContactProgramSettings",
                 "summary": "Get program settings",
-                "tags": [                    
+                "tags": [
                     "Contacts"
                 ],
                 "parameters": [
@@ -629,7 +629,7 @@
             "get": {
                 "operationId": "getReferralFriendContent",
                 "summary": "Get the referred friend's content",
-                "tags": [                    
+                "tags": [
                     "Referrals"
                 ],
                 "description": "Get the content to show to the referred friend based on the referral shared with them (based on the referralID).",

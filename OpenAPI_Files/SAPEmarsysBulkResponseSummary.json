@@ -1,1 +1,297 @@
-{"x-sap-shortText":"Email reporting related API endpoint. It is used to collect reporting information from multiple campaigns.","x-stoplight":{"id":"b8bkfdpzdnrmn"},"openapi":"3.0.3","info":{"version":"1.0.0","title":"SAP Emarsys Bulk Response Summary","description":"Use this endpoint to collect reporting information from multiple campaings, such as number of emails sent and received. You can also check email opens and clicks as well as different types of bounces to be able to determine your next steps in the email strategy."},"externalDocs":{"description":"For more information, please visit our official SAP Emarsys developer portal.","url":"https://dev.emarsys.com/docs/core-api-reference/b8bkfdpzdnrmn-bulk-response-summary"},"servers":[{"url":"https://{host}/api/email/reporting/v2","description":"Public API","variables":{"host":{"default":"api.emarsys.net"}}}],"paths":{"/campaigns/responseSummary/filter":{"post":{"summary":"Bulk response summary","tags":["Response summary"],"description":"<!-- theme: warning -->\n> #### Important!\n>\n> Please note that the URL for this endpoint differs from other Emarsys Core API URLs. The host server for this endpoint is at: https://api.emarsys.net/api/email/reporting/v2\nThe endpoint returns the summary of the responses of multiple email campaigns.","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/BulkResponseSummaryRequest"}}}},"responses":{"200":{"description":"Indicates that the request has succeeded.","content":{"application/json":{"schema":{"$ref":"#/components/schemas/BulkResponseSummaryResponse"}}}},"400":{"description":"The campaignIds field is missing, it is not array or it contains at least one invalid type of campaign id.","content":{"application/json":{"schema":{"type":"object","properties":{"error":{"type":"object","properties":{"message":{"type":"string"},"code":{"type":"string"}}}}},"examples":{"Payload is invalid":{"value":{"error":{"message":"Payload is invalid","code":"invalid-payload"}}},"Field is missing":{"value":{"error":{"message":"Field campaignIds is required","code":"field-is-required"}}},"Field values":{"value":{"error":{"message":"Count of campaign ids in payload must be between 1 and 5000","code":"invalid-count-of-campaign-ids"}}}}}}},"500":{"description":"Indicates that the request has been accepted for processing, but the processing has not been completed. The location to check the status of the request should be returned in the response.","content":{"application/json":{"schema":{"type":"object","properties":{"error":{"type":"object","properties":{"message":{"type":"string","example":"Internal Server Error"},"code":{"type":"string","example":"internal-server-error"}}}}},"example":{"error":{"message":"Internal Server Error","code":"internal-server-error"}}}}}},"x-stoplight":{"id":"n7gmqmypxjbac"},"security":[{"oauth2ClientCredentials":[]}]}}},"components":{"schemas":{"BulkResponseSummaryRequest":{"type":"object","properties":{"campaignIds":{"type":"array","minItems":1,"maxItems":3000,"items":{"type":"integer","format":"int64","minimum":1,"maximum":3000},"example":[123,456,789]}},"required":["campaignIds"],"x-stoplight":{"id":"nsb07vz2639e7"}},"BulkResponseSummaryResponse":{"type":"object","properties":{"data":{"type":"array","items":{"$ref":"#/components/schemas/BulkResponseSummaryResult"}}},"x-stoplight":{"id":"bq29zm2pc52sp"}},"BulkResponseSummaryResult":{"type":"object","properties":{"campaignId":{"type":"integer","format":"int64","example":44344543},"launchId":{"type":"integer","format":"int64","example":4355676},"planned":{"type":"integer","format":"int64","example":33276},"sent":{"type":"integer","format":"int64","example":32467},"softBounced":{"type":"integer","format":"int64","example":1134},"hardBounced":{"type":"integer","format":"int64","example":468},"blockBounced":{"type":"integer","format":"int64","example":55},"opened":{"type":"integer","format":"int64","example":3235},"privacyOpened":{"type":"integer","format":"int64","example":321},"unsubscribed":{"type":"integer","format":"int64","example":43},"totalClicked":{"type":"integer","format":"int64","example":656},"uniqueClicked":{"type":"integer","format":"int64","example":231},"complained":{"type":"integer","format":"int64","example":43}},"x-stoplight":{"id":"ibpl8cia14ybr"},"x-examples":{"campaignId":433121,"launchId":3321345,"planned":234432,"sent":null,"softBounced":null,"hardBounced":null,"blockBounced":null,"opened":88747382,"privacyOpened":554323,"unsubscribed":4432567,"totalClicked":334678,"uniqueClicked":997859493,"complained":55432456}}},"securitySchemes":{"oauth2ClientCredentials":{"type":"oauth2","flows":{"clientCredentials":{"tokenUrl":"https://{host}/oauth2/token","scopes":{}}},"description":"To use this API, you must first obtain an OAuth 2.0 client credentials token. After that you can use the token to call the API. For more information, see [Authentication](https://dev.emarsys.com/docs/emarsys-core-api-guides/branches/OAuth-2.0/b3c3a1eba8515-authentication-in-v3-api)."}}},"security":[{"oauth2ClientCredentials":[]}]}
+{
+    "x-sap-shortText": "Email reporting related API endpoint. It is used to collect reporting information from multiple campaigns.",
+    "x-stoplight": {
+        "id": "b8bkfdpzdnrmn"
+    },
+    "openapi": "3.0.3",
+    "info": {
+        "version": "1.0.0",
+        "title": "SAP Emarsys Bulk Response Summary",
+        "description": "Use this endpoint to collect reporting information from multiple campaings, such as number of emails sent and received. You can also check email opens and clicks as well as different types of bounces to be able to determine your next steps in the email strategy."
+    },
+    "externalDocs": {
+        "description": "For more information, please visit our official SAP Emarsys developer portal.",
+        "url": "https://dev.emarsys.com/docs/core-api-reference/b8bkfdpzdnrmn-bulk-response-summary"
+    },
+    "servers": [
+        {
+            "url": "https://{host}/api/email/reporting/v2",
+            "description": "Public API",
+            "variables": {
+                "host": {
+                    "default": "api.emarsys.net"
+                }
+            }
+        }
+    ],
+    "paths": {
+        "/campaigns/responseSummary/filter": {
+            "post": {
+                "summary": "Bulk response summary",
+                "tags": [
+                    "Response summary"
+                ],
+                "description": "<!-- theme: warning -->\n> #### Important!\n>\n> Please note that the URL for this endpoint differs from other Emarsys Core API URLs. The host server for this endpoint is at: https://api.emarsys.net/api/email/reporting/v2\nThe endpoint returns the summary of the responses of multiple email campaigns.",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/BulkResponseSummaryRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Indicates that the request has succeeded.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BulkResponseSummaryResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "The campaignIds field is missing, it is not array or it contains at least one invalid type of campaign id.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "object",
+                                            "properties": {
+                                                "message": {
+                                                    "type": "string"
+                                                },
+                                                "code": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "examples": {
+                                    "Payload is invalid": {
+                                        "value": {
+                                            "error": {
+                                                "message": "Payload is invalid",
+                                                "code": "invalid-payload"
+                                            }
+                                        }
+                                    },
+                                    "Field is missing": {
+                                        "value": {
+                                            "error": {
+                                                "message": "Field campaignIds is required",
+                                                "code": "field-is-required"
+                                            }
+                                        }
+                                    },
+                                    "Field values": {
+                                        "value": {
+                                            "error": {
+                                                "message": "Count of campaign ids in payload must be between 1 and 5000",
+                                                "code": "invalid-count-of-campaign-ids"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Indicates that the request has been accepted for processing, but the processing has not been completed. The location to check the status of the request should be returned in the response.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "object",
+                                            "properties": {
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Internal Server Error"
+                                                },
+                                                "code": {
+                                                    "type": "string",
+                                                    "example": "internal-server-error"
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "example": {
+                                    "error": {
+                                        "message": "Internal Server Error",
+                                        "code": "internal-server-error"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "x-stoplight": {
+                    "id": "n7gmqmypxjbac"
+                },
+                "security": [
+                    {
+                        "oauth2ClientCredentials": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "BulkResponseSummaryRequest": {
+                "type": "object",
+                "properties": {
+                    "campaignIds": {
+                        "type": "array",
+                        "minItems": 1,
+                        "maxItems": 3000,
+                        "items": {
+                            "type": "integer",
+                            "format": "int64",
+                            "minimum": 1,
+                            "maximum": 3000
+                        },
+                        "example": [
+                            123,
+                            456,
+                            789
+                        ]
+                    }
+                },
+                "required": [
+                    "campaignIds"
+                ],
+                "x-stoplight": {
+                    "id": "nsb07vz2639e7"
+                }
+            },
+            "BulkResponseSummaryResponse": {
+                "type": "object",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/BulkResponseSummaryResult"
+                        }
+                    }
+                },
+                "x-stoplight": {
+                    "id": "bq29zm2pc52sp"
+                }
+            },
+            "BulkResponseSummaryResult": {
+                "type": "object",
+                "properties": {
+                    "campaignId": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 44344543
+                    },
+                    "launchId": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 4355676
+                    },
+                    "planned": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 33276
+                    },
+                    "sent": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 32467
+                    },
+                    "softBounced": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1134
+                    },
+                    "hardBounced": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 468
+                    },
+                    "blockBounced": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 55
+                    },
+                    "opened": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 3235
+                    },
+                    "privacyOpened": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 321
+                    },
+                    "unsubscribed": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 43
+                    },
+                    "totalClicked": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 656
+                    },
+                    "uniqueClicked": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 231
+                    },
+                    "complained": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 43
+                    }
+                },
+                "x-stoplight": {
+                    "id": "ibpl8cia14ybr"
+                },
+                "x-examples": {
+                    "campaignId": 433121,
+                    "launchId": 3321345,
+                    "planned": 234432,
+                    "sent": null,
+                    "softBounced": null,
+                    "hardBounced": null,
+                    "blockBounced": null,
+                    "opened": 88747382,
+                    "privacyOpened": 554323,
+                    "unsubscribed": 4432567,
+                    "totalClicked": 334678,
+                    "uniqueClicked": 997859493,
+                    "complained": 55432456
+                }
+            }
+        },
+        "securitySchemes": {
+            "oauth2ClientCredentials": {
+                "type": "oauth2",
+                "flows": {
+                    "clientCredentials": {
+                        "tokenUrl": "https://{host}/oauth2/token",
+                        "scopes": {}
+                    }
+                },
+                "description": "To use this API, you must first obtain an OAuth 2.0 client credentials token. After that you can use the token to call the API. For more information, see [Authentication](https://dev.emarsys.com/docs/emarsys-core-api-guides/branches/OAuth-2.0/b3c3a1eba8515-authentication-in-v3-api)."
+            }
+        }
+    },
+    "security": [
+        {
+            "oauth2ClientCredentials": []
+        }
+    ]
+}

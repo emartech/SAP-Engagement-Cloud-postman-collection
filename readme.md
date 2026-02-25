@@ -1,5 +1,4 @@
 # SAP Engagement Cloud - Developer Tooling
-**This repo was based on the beta collection, and is in progress of being updated** 
 
 **Written in the Postman format and tested with Bruno**
 
@@ -48,18 +47,21 @@ To create your API user, follow [this documentation guide for OpenID Connect](ht
 
 ### Configuring your Base URL
 
-In the SAP Engagement Cloud, you will need to specify the API endpoint that your account uses for your requests. During the beta, that endpoint will always be `https://api.sap.emarsys.net/api`. In the future, you will be able to find it in the same page as your API users' permissions.
+In the SAP Engagement Cloud, you will need to specify the API endpoint that your account uses for your requests.
 
 Here's how to set the endpoint in your environment:
 
-1. Find out your endpoint (`https://api.sap.emarsys.net/api` will always be the correct endpoint while in Beta)
+1. Find out your endpoint. This is visible from the API user management page, and would have been displayed when you created the API user initially.
 1. Click on the Environments dropdown in the top-right corner of Postman (it will display the name of your current environment if you have one selected)
 1. Click the arrow icon next to the evironment you'd like to use, or click the 'plus' button next to the search bar to create a new one
-1. Type "baseUrl" into the Variable column where it says "Add Variable" and for the value, paste your endpoint found in step 1.
+1. Type "baseUrl" into the Variable column where it says "Add Variable" and for the value, paste your endpoint found in step 1. 
+
+> [!NOTE]
+> Be sure to remove the "https://" from the beginning of your baseURL when you enter it into postman. The Collection endpoints already contain "https://" and having it appear twice would cause issues
 
 Your environment should look like this:
 
-![The program Postman, with the Environments editiong window open. There is a table of data with columns 'variable' and 'value'. The entries are the variable 'OIDC_ClientID' with no value, 'OIDC_Secret' with no value, and 'baseUrl' with a value of 'https://api.sap.emarsys.net/api'."](./readme-images/postman-beta-environment-with-baseUrl.png)
+![The program Postman, with the Environments editiong window open. There is a table of data with columns 'variable' and 'value'. The entries are the variable 'OIDC_ClientID' with no value, 'OIDC_Secret' with no value, and 'baseUrl' with a value of 'https://api.sap.emarsys.net/api'."](./readme-images/postman-prod-environment-with-baseUrl.png)
 
 #### Once your API user and base url are configured as explained above, you're ready to start using the Postman collection!
 
@@ -113,9 +115,8 @@ The required variables are:
 - OIDC_SECRET
 - baseUrl
 
-The baseUrl variable is the endpoint for API requests, which will always be `https://api.sap.emarsys.net/api` during the beta.
-
-In the Engagement Cloud edition of the SAP Engagement Cloud APIs, you will need to specify the API endpoint that your account uses for your requests. During the beta, that endpoint will always be `https://api.sap.emarsys.net/api`. In the future, you will be able to find it in the same page as your API users' permissions.
+> [!NOTE]
+> Be sure to remove the "https://" from the beginning of your baseURL when you enter it into Bruno. The Collection endpoints already contain "https://" and having it appear twice would cause issues
 
 > [!NOTE] 
 > If you are using [SAP Cloud Identities](https://help.emarsys.com/hc/en-us/articles/22036625729554-Security-settings-API-Credentials#openid-connect-sap-cloud-identity) to manage your SAP Engagement Cloud API credentials, you will need to add your Access Token URL in the variable "OIDC_SCI_HOST"

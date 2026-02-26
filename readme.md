@@ -1,7 +1,7 @@
 # SAP Engagement Cloud Enterprise Edition - Developer Tooling
 
 > [!NOTE]
-> This collection is for Enterprise Edition only! For Standard edition, the collection can be found [here](https://github.com/emartech/Emarsys-postman-collection).
+> This collection is for Enterprise Edition only! For Standard edition of SAP Engagement Cloud, the collection can be found [here](https://github.com/emartech/Emarsys-postman-collection).
 
 **Written in the Postman format and tested with Bruno**
 

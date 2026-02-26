@@ -2,7 +2,7 @@
 
 **Written in the Postman format and tested with Bruno**
 
-This document describes the SAP Engagement Cloud Suite API v3, which uses OpenID Connect (OAuth 2.0 client credentials grant) authentication. 
+This document describes the SAP Engagement Cloud Suite API, which uses OpenID Connect (OAuth 2.0 client credentials grant) authentication. 
 
 - Introduction to SAP Engagement Cloud API: [link](https://help.sap.com/docs/SAP_EMARSYS/8bf21e3e3ad3475bb9e25de1e0ac3d86/fdf6b8c874c11014ab07d03045e4962a.html)
 - Creating your API credentials: [link](https://help.sap.com/docs/SAP_EMARSYS/5d44574160f44536b0130abf58cb87cc/fdf4b58974c110149353957a3e7ef453.html#openid-connect)
